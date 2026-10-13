@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}{{ 'Edit prompt' if prompt else 'New prompt' }}{% endblock %}
+{% block heading %}{{ 'Edit prompt' if prompt else 'Create a prompt' }}{% endblock %}
+{% block subheading %}<p>Fill in the Blueprint fields. If you leave &ldquo;Full prompt&rdquo; empty it is composed from the Blueprint fields.</p>{% endblock %}
+{% block content %}
+<script type="application/json" id="prompt-json">{{ (prompt or {})|tojson }}</script>
+<form id="prompt-form" novalidate class="stack">
+  <div class="alert alert-danger" id="form-errors" role="alert" hidden>{{ icon('alert') }}<div><strong>Please fix the following:</strong><ul id="form-error-list" style="margin:.4rem 0 0"></ul></div></div>
+  <section class="card"><h2>Basics</h2>
+    <div class="form-row">
+      <div class="field"><label for="f-title">Title *</label><input class="input" id="f-title" maxlength="200" required></div>
+      <div class="field"><label for="f-slug">Slug (optional)</label><input class="input" id="f-slug" maxlength="220" placeholder="generated from the title"><div class="help">Must be unique.</div></div>
+    </div>
+    <div class="field"><label for="f-desc">Short description *</label><input class="input" id="f-desc" maxlength="1000" required></div>
+    <div class="form-row">
+      <div class="field"><label for="f-cat">Category *</label><select class="select" id="f-cat" required><option value="">Choose...</option>{% for c in categories %}<option value="{{ c.name }}" data-subs="{{ c.subcategories|map(attribute='name')|join('|') }}">{{ c.name }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="f-sub">Subcategory</label><input class="input" id="f-sub" list="sub-list" maxlength="100"><datalist id="sub-list"></datalist></div>
+      <div class="field"><label for="f-diff">Difficulty</label><select class="select" id="f-diff">{% for d in difficulties %}<option>{{ d }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label for="f-role">User role</label><input class="input" id="f-role" maxlength="120" placeholder="e.g. Business Analyst"></div>
+      <div class="field"><label for="f-use">Use case</label><input class="input" id="f-use" maxlength="200"></div>
+      <div class="field"><label for="f-tags">Tags (comma separated)</label><input class="input" id="f-tags" maxlength="400"></div>
+    </div>
+    <fieldset><legend>AI tool compatibility</legend><div class="row">{% for t in tools %}<label class="check"><input type="checkbox" name="tools" value="{{ t }}" {{ 'checked' if t == 'Tool-independent' and not prompt }}> {{ t }}</label>{% endfor %}</div></fieldset>
+    <div class="row"><label class="check"><input type="checkbox" id="f-published" checked> Published</label><label class="check"><input type="checkbox" id="f-featured"> Featured</label></div>
+  </section>
+  <section class="card"><h2>Prompt Blueprint</h2>
+    <div class="field"><label for="c-role">Role</label><input class="input" id="c-role" maxlength="300" placeholder="a senior business analyst"></div>
+    <div class="field"><label for="c-context">Context</label><textarea class="textarea" id="c-context" maxlength="3000"></textarea></div>
+    <div class="field"><label for="c-task">Task</label><textarea class="textarea" id="c-task" maxlength="3000"></textarea></div>
+    <div class="field"><label for="c-input">Input</label><textarea class="textarea" id="c-input" maxlength="3000"></textarea></div>
+    <div class="field"><label for="c-output">Output format</label><textarea class="textarea" id="c-output" maxlength="3000"></textarea></div>
+    <div class="field"><label for="f-constraints">Constraints (one per line)</label><textarea class="textarea" id="f-constraints"></textarea></div>
+    <div class="field"><label for="c-quality">Quality criteria (one per line)</label><textarea class="textarea" id="c-quality"></textarea></div>
+    <div class="field"><label for="f-full">Full prompt</label><textarea class="textarea textarea-lg mono" id="f-full" maxlength="20000"></textarea>
+      <div class="row" style="margin-top:.4rem"><button type="button" class="btn btn-secondary btn-sm" id="compose-btn">{{ icon('wand') }} Compose from Blueprint</button><button type="button" class="btn btn-secondary btn-sm" id="score-btn">{{ icon('target') }} Check quality score</button><span id="score-out" class="small" role="status"></span></div></div>
+    {% include "partials/privacy_warning.html" %}
+  </section>
+  <section class="card"><h2>Teaching content</h2>
+    <div class="field"><label for="f-why">Why it works</label><textarea class="textarea" id="f-why"></textarea></div>
+    <div class="field"><label for="f-expected">Expected output</label><textarea class="textarea" id="f-expected"></textarea></div>
+    <div class="field"><label for="f-exout">Example output description</label><textarea class="textarea" id="f-exout"></textarea></div>
+    <div class="form-row">
+      <div class="field"><label for="f-tips">Customization tips (one per line)</label><textarea class="textarea" id="f-tips"></textarea></div>
+      <div class="field"><label for="f-mistakes">Common mistakes (one per line)</label><textarea class="textarea" id="f-mistakes"></textarea></div>
+    </div>
+    <div class="field"><label for="f-exin">Example inputs (one per line, NAME = value)</label><textarea class="textarea mono" id="f-exin" placeholder="TOPIC = Quarterly review"></textarea><div class="help">Required inputs are detected automatically from [PLACEHOLDERS] in the prompt.</div></div>
+  </section>
+  <div class="row"><button type="submit" class="btn btn-primary btn-lg" id="save-btn">{{ icon('save') }} {{ 'Save changes' if prompt else 'Create prompt' }}</button><a class="btn btn-secondary btn-lg" href="/admin">Cancel</a></div>
+</form>
+{% endblock %}
+{% block scripts %}<script src="/static/js/admin_prompt.js"></script>{% endblock %}

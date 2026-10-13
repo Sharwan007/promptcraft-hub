@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon, prompt_card, difficulty_badge %}
+{% block title %}Dashboard{% endblock %}
+{% block page_head %}{% endblock %}
+{% block content %}
+<section class="hero" aria-labelledby="welcome">
+  <h1 id="welcome">Welcome back, {{ profile.display_name }}</h1>
+  <p>Build better prompts. Get better results. Find ready-to-use prompts, learn why they work, and improve your own.</p>
+  <form class="hero-search" action="/prompts" method="get" role="search">
+    <label class="sr-only" for="hero-q">Search the prompt library</label>
+    <input id="hero-q" name="q" type="search" placeholder="Try: status report, SQL, meeting minutes, complaint..." maxlength="100">
+    <button class="btn btn-accent" type="submit">{{ icon('search') }} Search</button>
+  </form>
+  <div class="hero-actions">
+    <a class="btn btn-primary" style="background:#fff;color:#312e81" href="/builder">{{ icon('wand') }} Build a Prompt</a>
+    <a class="btn btn-secondary" href="/improver">{{ icon('sparkles') }} Improve a Prompt</a>
+    <a class="btn btn-secondary" href="/diagnostic">{{ icon('stethoscope') }} Diagnose a Prompt</a>
+  </div>
+</section>
+
+<section class="section" aria-label="Library statistics">
+  <div class="grid grid-4" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+    <div class="card stat"><span class="ico">{{ icon('book') }}</span><div><strong>{{ stats.total_prompts }}</strong><span>Total prompts</span></div></div>
+    <div class="card stat"><span class="ico">{{ icon('layers') }}</span><div><strong>{{ stats.total_categories }}</strong><span>Categories</span></div></div>
+    <div class="card stat"><span class="ico">{{ icon('heart') }}</span><div><strong>{{ stats.favorites }}</strong><span>Favorite prompts</span></div></div>
+    <div class="card stat"><span class="ico">{{ icon('folder') }}</span><div><strong>{{ stats.custom_prompts }}</strong><span>Custom prompts</span></div></div>
+    <div class="card stat"><span class="ico">{{ icon('graduation') }}</span><div><strong>{{ stats.completed_lessons }}</strong><span>Completed lessons</span></div></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="start-h">
+  <div class="section-head"><h2 id="start-h">Start here</h2></div>
+  <div class="grid grid-4">
+    <a class="start-card" href="/prompts"><div class="num">1</div><h3>Find a prompt</h3><p>Browse {{ stats.total_prompts }} ready-to-use prompts with explanations.</p></a>
+    <a class="start-card" href="/builder"><div class="num">2</div><h3>Build a prompt</h3><p>Follow the Prompt Blueprint step by step.</p></a>
+    <a class="start-card" href="/improver"><div class="num">3</div><h3>Improve a prompt</h3><p>Turn a short request into a structured prompt.</p></a>
+    <a class="start-card" href="/diagnostic"><div class="num">4</div><h3>Diagnose a prompt</h3><p>See what is present, missing or unclear.</p></a>
+  </div>
+</section>
+
+<div class="grid grid-2 section" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+  {% if potd %}
+  <section class="card potd" aria-labelledby="potd-h">
+    <div class="card-head"><h2 id="potd-h">{{ icon('star') }} Prompt of the day</h2></div>
+    <h3><a href="/prompts/{{ potd.slug }}">{{ potd.title }}</a></h3>
+    <p class="muted">{{ potd.description }}</p>
+    <div class="row"><span class="badge badge-cat">{{ potd.category }}</span>{{ difficulty_badge(potd.difficulty) }}<a class="btn btn-primary btn-sm" href="/prompts/{{ potd.slug }}">Open prompt</a></div>
+  </section>
+  {% endif %}
+  <section class="card" aria-labelledby="learn-h">
+    <div class="card-head"><h2 id="learn-h">{{ icon('graduation') }} Learning progress</h2><a href="/learning" class="small">All lessons</a></div>
+    <p class="muted">{{ progress.completed }} of {{ progress.total }} lessons completed ({{ progress.percent }}%)</p>
+    <div class="progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="Learning progress"><span style="width: {{ progress.percent }}%"></span></div>
+    {% if next_lesson %}<p style="margin-top:1rem">Next lesson: <a href="/learning/{{ next_lesson.slug }}"><strong>{{ next_lesson.number }}. {{ next_lesson.title }}</strong></a></p>{% else %}<p style="margin-top:1rem">All lessons complete. Great work!</p>{% endif %}
+  </section>
+</div>
+
+<section class="section" aria-labelledby="tips-h">
+  <div class="card" style="background:var(--primary-50)">
+    <h2 id="tips-h">{{ icon('lightbulb') }} Quick prompt-engineering tips</h2>
+    <ul style="margin:0">{% for t in tips %}<li>{{ t }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="feat-h">
+  <div class="section-head"><h2 id="feat-h">Featured prompts</h2><a href="/prompts?featured=true">See all featured</a></div>
+  <div class="prompt-grid">{% for p in featured %}{{ prompt_card(p) }}{% endfor %}</div>
+</section>
+
+{% if popular %}
+<section class="section" aria-labelledby="pop-h">
+  <div class="section-head"><h2 id="pop-h">Popular categories</h2><a href="/prompts">Browse everything</a></div>
+  <div class="grid grid-3">
+    {% for c in popular %}<a class="cat-tile" href="/prompts?category={{ c.slug }}"><span class="ico">{{ icon('folder') }}</span><span><strong>{{ c.name }}</strong><small>{{ c.count }} prompts</small></span></a>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section" aria-labelledby="recent-h">
+  <div class="section-head"><h2 id="recent-h">Recently viewed</h2></div>
+  {% if recent %}<div class="prompt-grid">{% for p in recent %}{{ prompt_card(p) }}{% endfor %}</div>
+  {% else %}<div class="empty">{{ icon('eye') }}<h3>Nothing viewed yet</h3><p>Prompts you open will appear here so you can get back to them quickly.</p><a class="btn btn-primary" href="/prompts">Browse the library</a></div>{% endif %}
+</section>
+
+<section class="section" aria-labelledby="fav-h">
+  <div class="section-head"><h2 id="fav-h">Your favorites</h2><a href="/favorites">Manage favorites</a></div>
+  {% if favorites %}<div class="prompt-grid">{% for p in favorites %}{{ prompt_card(p) }}{% endfor %}</div>
+  {% else %}<div class="empty">{{ icon('heart') }}<h3>No favorites yet</h3><p>Select the heart on any prompt to keep it here.</p></div>{% endif %}
+</section>
+
+<section class="section" aria-labelledby="new-h">
+  <div class="section-head"><h2 id="new-h">Recently added</h2></div>
+  <div class="prompt-grid">{% for p in newest %}{{ prompt_card(p) }}{% endfor %}</div>
+</section>
+{% endblock %}

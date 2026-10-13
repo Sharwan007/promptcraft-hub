@@ -1,0 +1,25 @@
+/* Design tokens - light theme (default). Dark overrides live in dark-mode.css. */
+:root {
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", "Consolas", "Courier New", monospace;
+  --primary-50: #eef2ff; --primary-100: #e0e7ff; --primary-500: #4f46e5; --primary: #3730a3; --primary-700: #312e81;
+  --secondary: #6d28d9; --secondary-50: #f3e8ff;
+  --accent: #0f766e; --accent-50: #ccfbf1;
+  --success: #166534; --success-bg: #dcfce7;
+  --warning: #92400e; --warning-bg: #fef3c7;
+  --danger: #b91c1c; --danger-bg: #fee2e2;
+  --info: #1e40af; --info-bg: #dbeafe;
+  --bg: #f5f6fb; --surface: #ffffff; --surface-2: #f0f2f9; --surface-3: #e8ebf5;
+  --border: #dfe3ef; --border-strong: #c3c9dc;
+  --text: #1a1e33; --text-muted: #525c78; --text-faint: #6b7592; --on-primary: #ffffff;
+  --sidebar-bg: #1e1b4b; --sidebar-text: #e0e7ff; --sidebar-muted: #a5b4fc; --sidebar-active: rgba(255,255,255,.14);
+  --focus: #2563eb;
+  --shadow-sm: 0 1px 2px rgba(25, 30, 60, .06);
+  --shadow: 0 4px 14px rgba(25, 30, 60, .08);
+  --shadow-lg: 0 16px 40px rgba(25, 30, 60, .18);
+  --radius-sm: 8px; --radius: 12px; --radius-lg: 18px;
+  --sp-1: .25rem; --sp-2: .5rem; --sp-3: .75rem; --sp-4: 1rem; --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem;
+  --sidebar-w: 264px; --sidebar-w-collapsed: 76px; --header-h: 64px;
+  --transition: 160ms ease;
+  --hl: #fde68a; --ph-bg: #ede9fe; --ph-text: #5b21b6;
+}

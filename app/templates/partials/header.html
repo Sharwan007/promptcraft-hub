@@ -1,0 +1,17 @@
+{% from "partials/macros.html" import icon %}
+<header class="header">
+  <button type="button" class="btn-icon menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">{{ icon('menu') }}</button>
+  <button type="button" class="btn-icon collapse-toggle" id="collapse-toggle" aria-label="Collapse or expand the sidebar" aria-controls="sidebar" data-tip="Toggle sidebar">{{ icon('sidebar') }}</button>
+  <form class="global-search" role="search" action="/prompts" method="get" autocomplete="off">
+    <label for="global-q" class="sr-only">Search prompts</label>
+    {{ icon('search') }}
+    <input id="global-q" name="q" type="search" placeholder="Search prompts, roles, tags...  (press / to focus)" maxlength="100" aria-autocomplete="list" aria-controls="global-suggest" aria-expanded="false">
+    <div class="suggest" id="global-suggest" role="listbox" hidden></div>
+  </form>
+  <div class="header-actions">
+    <a class="btn-icon" href="/help" aria-label="Help" data-tip="Help">{{ icon('help') }}</a>
+    <button type="button" class="btn-icon" id="theme-toggle" aria-label="Switch between light and dark mode" data-tip="Light / dark mode">
+      <span class="theme-icon-light">{{ icon('moon') }}</span><span class="theme-icon-dark">{{ icon('sun') }}</span>
+    </button>
+  </div>
+</header>

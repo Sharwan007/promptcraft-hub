@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Import and export{% endblock %}
+{% block heading %}Import and export{% endblock %}
+{% block subheading %}<p>Validate a JSON file before importing prompts, or export the whole library.</p>{% endblock %}
+{% block content %}
+<div class="grid grid-2" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
+  <section class="card" aria-labelledby="imp-h"><h2 id="imp-h">{{ icon('upload') }} Import prompts (JSON)</h2>
+    <form id="import-form" novalidate>
+      <div class="field"><label for="imp-file">JSON file (max {{ max_mb }} MB)</label><input class="input" type="file" id="imp-file" accept=".json,application/json"><div class="error-text" id="imp-error" role="alert" hidden></div></div>
+      <fieldset><legend>If a prompt already exists (same slug)</legend>
+        <label class="check"><input type="radio" name="dups" value="skip" checked> Skip it</label><label class="check"><input type="radio" name="dups" value="update"> Update it</label></fieldset>
+      <fieldset><legend>If the file contains invalid prompts</legend>
+        <label class="check"><input type="radio" name="onerr" value="abort" checked> Abort &ndash; import nothing</label><label class="check"><input type="radio" name="onerr" value="skip_invalid"> Skip invalid prompts and import the rest</label></fieldset>
+      <div class="row"><button class="btn btn-secondary" type="button" id="preview-btn">{{ icon('eye') }} Preview and validate</button><button class="btn btn-primary" type="button" id="commit-btn" disabled>{{ icon('check') }} Import</button></div>
+    </form>
+    <p class="help">Sample file: <span class="mono">samples/sample_prompt_import.json</span> in the project folder.</p>
+  </section>
+  <section class="card" aria-labelledby="exp-h"><h2 id="exp-h">{{ icon('download') }} Export library</h2>
+    <p>Download every prompt (including unpublished and archived) with its categories as one JSON file. Unicode is preserved.</p>
+    <a class="btn btn-primary" href="/api/export" download>{{ icon('download') }} Export library JSON</a>
+    <hr><h3>Database backup</h3><p class="muted">Creates a timestamped copy after an integrity check.</p>
+    <button class="btn btn-secondary" type="button" id="backup-btn">{{ icon('database') }} Create backup now</button>
+  </section>
+</div>
+<section class="section card" id="import-result" hidden aria-live="polite"><h2>Preview / result</h2><div id="import-summary"></div><div class="table-wrap" style="margin-top:.75rem"><table><thead><tr><th scope="col">#</th><th scope="col">Title</th><th scope="col">Slug</th><th scope="col">Status</th><th scope="col">Problems</th></tr></thead><tbody id="import-rows"></tbody></table></div><div id="import-download" style="margin-top:.75rem"></div></section>
+<section class="section"><h2>Recent imports</h2><div class="table-wrap"><table><thead><tr><th scope="col">File</th><th scope="col">Status</th><th scope="col">Result</th><th scope="col">Report</th></tr></thead><tbody>
+  {% for h in imports %}<tr><td>{{ h.filename }}</td><td><span class="badge {{ 'badge-present' if h.status == 'completed' else 'badge-missing' }}">{{ h.status }}</span></td><td class="small">{{ h.created_count }} new, {{ h.updated_count }} updated, {{ h.skipped_count }} skipped</td><td>{% if h.error_count %}<a href="/api/admin/imports/{{ h.id }}/errors" download>Download report ({{ h.error_count }})</a>{% else %}-{% endif %}</td></tr>
+  {% else %}<tr><td colspan="4" class="muted">No imports yet.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/admin_import.js"></script>{% endblock %}

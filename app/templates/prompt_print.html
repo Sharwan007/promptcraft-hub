@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{{ p.title }} | Print</title>
+<link rel="stylesheet" href="/static/css/variables.css"><link rel="stylesheet" href="/static/css/base.css"><link rel="stylesheet" href="/static/css/components.css"><link rel="stylesheet" href="/static/css/pages.css">
+<script src="/static/js/theme-init.js"></script></head>
+<body style="background:#fff">
+<div class="print-page">
+  <p class="small no-print"><a href="/prompts/{{ p.slug }}">&larr; Back to the prompt</a> &middot; <button type="button" class="btn btn-primary btn-sm" id="print-btn">Print</button></p>
+  <h1>{{ p.title }}</h1>
+  <p>{{ p.description }}</p>
+  <p class="small"><strong>Category:</strong> {{ p.category }} &middot; <strong>Difficulty:</strong> {{ p.difficulty }} &middot; <strong>AI tools:</strong> {{ p.ai_tools|join(', ') }} &middot; <strong>Version:</strong> {{ p.version }}</p>
+  <h2>Prompt</h2><pre class="prompt-box">{{ p.full_prompt }}</pre>
+  {% if p.required_inputs %}<h2>Fill in</h2><ul>{% for n in p.required_inputs %}<li>[{{ n }}] &mdash; e.g. {{ p.example_inputs.get(n, '') }}</li>{% endfor %}</ul>{% endif %}
+  <h2>Why it works</h2><p>{{ p.why_it_works }}</p>
+  <h2>Customization tips</h2><ul>{% for t in p.customization_tips %}<li>{{ t }}</li>{% endfor %}</ul>
+  <h2>Common mistakes</h2><ul>{% for t in p.common_mistakes %}<li>{{ t }}</li>{% endfor %}</ul>
+  <p class="small" style="margin-top:2rem">Printed from PromptCraft Hub. Do not enter confidential or personal data into AI tools unless they are approved by your organisation.</p>
+</div>
+<script src="/static/js/print.js"></script>
+</body></html>

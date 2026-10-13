@@ -1,0 +1,290 @@
+{
+ "examples": [
+  {
+   "scenario": "Professional email",
+   "description": "Requesting a status update from a busy stakeholder.",
+   "weak_prompt": "Write an email.",
+   "problems": [
+    "No purpose, recipient or topic.",
+    "No tone or length.",
+    "No call to action."
+   ],
+   "improved_prompt": "Act as a professional business communication specialist.\n\nContext:\nI need to request a project status update from a stakeholder who is busy and reads email on mobile.\n\nTask:\nWrite a concise and polite email asking for the current project status, completed activities, open risks and the expected completion date.\n\nInput:\nProject: [PROJECT NAME]. Stakeholder: [STAKEHOLDER ROLE]. Reply needed by: [DEADLINE].\n\nOutput format:\nA subject line followed by the email body in two short paragraphs and a bulleted list of the four items requested.\n\nConstraints:\n- Keep the email under 150 words.\n- Professional, polite and action-oriented tone.\n- Include a clear request for a response by the deadline.\n\nQuality criteria:\n- The email is clear, respectful, concise and easy to answer.\n- Do not invent project details.",
+   "improvements": [
+    "Added role, context and audience.",
+    "Defined the four items to request.",
+    "Specified subject line and structure.",
+    "Added length, tone and a deadline."
+   ],
+   "why_better": "The AI no longer guesses the purpose or style, so the result needs fewer edits and the reader knows exactly how to respond.",
+   "expected_difference": "Weak: a generic email about nothing in particular. Improved: a ready-to-send, 120-word request with subject line and deadline.",
+   "sort_order": 1
+  },
+  {
+   "scenario": "Meeting summary",
+   "description": "Summarising a stakeholder meeting for absent colleagues.",
+   "weak_prompt": "Summarize this meeting.",
+   "problems": [
+    "No source text or length.",
+    "No structure for decisions and actions.",
+    "No rule for missing information."
+   ],
+   "improved_prompt": "Act as an executive assistant who writes accurate meeting summaries.\n\nContext:\nA meeting about our supplier review took place and colleagues who were absent need the outcome quickly.\n\nTask:\nSummarise the notes, highlighting decisions made, key discussion points, risks and follow-up actions with owners and dates.\n\nInput:\nMeeting notes: [MEETING NOTES].\n\nOutput format:\nHeadings: Purpose, Decisions, Key discussion, Risks, Actions (table with Action, Owner, Due date). Under 250 words excluding the table.\n\nConstraints:\n- Use only the notes; write 'Not stated' where owners or dates are missing.\n- Neutral tone, no opinions attributed unless named in the notes.\n\nQuality criteria:\n- A reader understands the outcome in one minute.\n- No invented facts.",
+   "improvements": [
+    "Defined the sections and length.",
+    "Separated decisions from discussion.",
+    "Added a 'Not stated' rule to prevent guessing."
+   ],
+   "why_better": "Structure and a rule for missing information make the summary scannable and trustworthy.",
+   "expected_difference": "Weak: a rambling paragraph. Improved: a one-page summary with decisions and an action table.",
+   "sort_order": 2
+  },
+  {
+   "scenario": "Minutes of meeting",
+   "description": "Creating formal minutes with numbered actions.",
+   "weak_prompt": "Write minutes of the meeting.",
+   "problems": [
+    "No notes provided.",
+    "No template or level of formality.",
+    "No handling of missing owners."
+   ],
+   "improved_prompt": "Act as a professional minute-taker.\n\nContext:\nWe held the weekly project meeting and need formal minutes for the project file.\n\nTask:\nCreate minutes with attendees, agenda items, numbered decisions and an action table with owner, due date and priority. Flag unclear items.\n\nInput:\nMeeting notes: [MEETING NOTES]. Date and attendees: [DATA].\n\nOutput format:\nHeadings: Meeting details, Attendees, Agenda items (Discussion, Decision), Action items table, Items needing clarification.\n\nConstraints:\n- Past tense and third person.\n- Number decisions D1, D2 and actions A1, A2.\n- Use 'TBC' for missing owners or dates.\n\nQuality criteria:\n- Every action has an ID, an owner and a due date or is flagged.\n- Minutes are factual and neutral.",
+   "improvements": [
+    "Added a formal structure.",
+    "Numbered decisions and actions.",
+    "Added a clarification list."
+   ],
+   "why_better": "Numbering and flags make the minutes usable for follow-up and audits.",
+   "expected_difference": "Weak: a generic template with invented content. Improved: traceable minutes with action IDs.",
+   "sort_order": 3
+  },
+  {
+   "scenario": "PowerPoint presentation",
+   "description": "Outlining a presentation for executives.",
+   "weak_prompt": "Create a presentation.",
+   "problems": [
+    "No topic, audience or number of slides.",
+    "No structure or design expectations.",
+    "No source material."
+   ],
+   "improved_prompt": "Act as a senior presentation strategist.\n\nContext:\nI must present a proposal to automate invoice processing to the executive committee in 15 minutes to obtain budget approval.\n\nTask:\nCreate a slide-by-slide outline with a title that states the message, three supporting bullets, a suggested visual and speaker notes for each slide.\n\nInput:\nKey facts: [SOURCE TEXT].\n\nOutput format:\nA numbered outline of 10 slides plus an appendix list, using the fields title, bullets, visual and notes.\n\nConstraints:\n- Maximum 20 words per slide body.\n- Professional, minimal design; one message per slide.\n- Use only the supplied figures.\n\nQuality criteria:\n- The deck can be understood from the titles alone.\n- The recommendation appears by slide 3.",
+   "improvements": [
+    "Added audience, goal and time.",
+    "Defined slide count and structure.",
+    "Added design and tone expectations."
+   ],
+   "why_better": "The AI gets a decision-focused storyline instead of a generic list of topics.",
+   "expected_difference": "Weak: a generic 5-slide template. Improved: a 10-slide storyline with action titles and notes.",
+   "sort_order": 4
+  },
+  {
+   "scenario": "SQL query",
+   "description": "Asking for a report query.",
+   "weak_prompt": "Write a SQL query for sales.",
+   "problems": [
+    "No schema or database type.",
+    "No definition of 'sales' or time period.",
+    "No output specification."
+   ],
+   "improved_prompt": "Act as a senior SQL developer.\n\nContext:\nI work with a SQL Server database and need a quarterly report for the sales director.\n\nTask:\nWrite a query that returns total sales per region for the last quarter, ordered from highest to lowest, and explain the logic briefly.\n\nInput:\nSchema: orders(order_id, customer_id, order_date, total), customers(customer_id, name, region).\n\nOutput format:\nA formatted SQL code block followed by numbered explanation points and a list of assumptions.\n\nConstraints:\n- Use only the listed tables and columns.\n- Use explicit JOIN syntax and no SELECT *.\n- The query must be read-only.\n\nQuality criteria:\n- The result answers the question exactly.\n- NULL and duplicate handling are stated.",
+   "improvements": [
+    "Provided the schema and dialect.",
+    "Defined the metric and period.",
+    "Added safety and style rules."
+   ],
+   "why_better": "With a schema and rules, the AI cannot invent columns, and the answer can be run and checked.",
+   "expected_difference": "Weak: a guess with invented tables. Improved: a runnable query with assumptions.",
+   "sort_order": 5
+  },
+  {
+   "scenario": "Excel data analysis",
+   "description": "Analysing monthly figures in Excel.",
+   "weak_prompt": "Analyze my Excel data.",
+   "problems": [
+    "No description of columns or questions.",
+    "No deliverable defined.",
+    "No Excel version."
+   ],
+   "improved_prompt": "Act as an Excel analyst who explains steps clearly.\n\nContext:\nI use Microsoft 365 and have monthly sales data by region and product that I must summarise for my manager.\n\nTask:\nTell me how to find the top five products by revenue per region and the month-over-month trend, using pivot tables and formulas.\n\nInput:\nColumns: Date, Region, Product, Units, Revenue (header in row 1, 2,000 rows).\n\nOutput format:\nNumbered steps with the exact pivot fields and formulas, followed by a suggested chart type and a validation check.\n\nConstraints:\n- Use only features available in Microsoft 365.\n- No macros.\n- Keep to eight steps.\n\nQuality criteria:\n- Steps can be followed without further questions.\n- A check confirms totals match the source.",
+   "improvements": [
+    "Described the data layout.",
+    "Defined the questions.",
+    "Limited tools and length."
+   ],
+   "why_better": "The AI can name real columns and give exact steps instead of general advice.",
+   "expected_difference": "Weak: generic Excel tips. Improved: a step-by-step method tailored to the data.",
+   "sort_order": 6
+  },
+  {
+   "scenario": "User stories",
+   "description": "Writing backlog stories for a feature.",
+   "weak_prompt": "Write user stories.",
+   "problems": [
+    "No feature or users.",
+    "No format or size.",
+    "No value statements."
+   ],
+   "improved_prompt": "Act as an experienced product owner.\n\nContext:\nOur team is building a self-service password reset feature for customers of our online portal.\n\nTask:\nWrite user stories in the format 'As a [role], I want [capability] so that [benefit]' and list dependencies and open questions for each.\n\nInput:\nFeature notes: [SOURCE TEXT].\n\nOutput format:\nA numbered list of 5 to 8 stories with Notes, Dependencies and Open questions, plus a list of stories that are too large.\n\nConstraints:\n- Each story must be small enough for one sprint.\n- No technical implementation details.\n- Stay within the feature.\n\nQuality criteria:\n- Stories follow the INVEST principles.\n- Every benefit states real business value.",
+   "improvements": [
+    "Named the feature and users.",
+    "Fixed the story format.",
+    "Added size and quality rules."
+   ],
+   "why_better": "Format and size rules produce backlog-ready items rather than loose ideas.",
+   "expected_difference": "Weak: two vague sentences. Improved: a set of INVEST-style stories.",
+   "sort_order": 7
+  },
+  {
+   "scenario": "Acceptance criteria",
+   "description": "Defining testable criteria.",
+   "weak_prompt": "Write acceptance criteria.",
+   "problems": [
+    "No story or business rules.",
+    "No format.",
+    "No negative cases."
+   ],
+   "improved_prompt": "Act as a business analyst and QA lead.\n\nContext:\nThe team needs clear criteria for the story: 'As a customer, I want to reset my password by email so that I can regain access'.\n\nTask:\nWrite acceptance criteria covering the main flow, alternative flows, validation, errors and edge cases.\n\nInput:\nBusiness rules: the reset link expires after 30 minutes; maximum 3 requests per hour.\n\nOutput format:\nNumbered scenarios in Given / When / Then format, then a list of questions for the product owner.\n\nConstraints:\n- Each scenario tests one behaviour.\n- Maximum 12 scenarios.\n- Use observable outcomes.\n\nQuality criteria:\n- Every business rule is covered.\n- Negative cases are included.",
+   "improvements": [
+    "Supplied the story and rules.",
+    "Required Given/When/Then.",
+    "Asked for negative cases."
+   ],
+   "why_better": "Testers and developers can use the result directly.",
+   "expected_difference": "Weak: generic statements like 'works correctly'. Improved: testable scenarios.",
+   "sort_order": 8
+  },
+  {
+   "scenario": "Project plan",
+   "description": "Planning a project.",
+   "weak_prompt": "Make a project plan.",
+   "problems": [
+    "No project, scope or deadline.",
+    "No level of detail.",
+    "No format."
+   ],
+   "improved_prompt": "Act as an experienced project manager.\n\nContext:\nWe must move our order-entry process to a self-service portal within four months with a team of five.\n\nTask:\nCreate a project plan with phases, key deliverables, milestones, dependencies, risks and resource needs.\n\nInput:\nConstraints: go-live by 30 September; budget 80,000 EUR; testing needs two weeks.\n\nOutput format:\nA phase table (Phase, Deliverables, Duration, Owner role), a milestone list and the top five risks with mitigations.\n\nConstraints:\n- Do not exceed the stated budget or deadline.\n- Mark assumptions.\n- Maximum one page.\n\nQuality criteria:\n- Dependencies contain no loops.\n- Risks include an owner and response.",
+   "improvements": [
+    "Defined scope, deadline and budget.",
+    "Specified deliverables and format.",
+    "Added assumptions rule."
+   ],
+   "why_better": "The plan can be reviewed against real constraints.",
+   "expected_difference": "Weak: a generic phase list. Improved: a plan tied to dates, budget and risks.",
+   "sort_order": 9
+  },
+  {
+   "scenario": "Executive summary",
+   "description": "Summarising a report for executives.",
+   "weak_prompt": "Write an executive summary.",
+   "problems": [
+    "No source document.",
+    "No audience or length.",
+    "No emphasis on decisions."
+   ],
+   "improved_prompt": "Act as a strategy consultant.\n\nContext:\nI have a 30-page market analysis and the executive board will read only one page.\n\nTask:\nWrite an executive summary that states the conclusion, three key findings with figures, risks and the decision required.\n\nInput:\nReport text: [SOURCE TEXT].\n\nOutput format:\nA one-page summary: Conclusion, Key findings, Risks, Decision required.\n\nConstraints:\n- Maximum 250 words.\n- Use only figures from the report.\n- No jargon.\n\nQuality criteria:\n- The first sentence is the conclusion.\n- The decision and deadline are explicit.",
+   "improvements": [
+    "Added source and audience.",
+    "Required a conclusion first.",
+    "Set length and number rules."
+   ],
+   "why_better": "It matches how executives read and prevents invented numbers.",
+   "expected_difference": "Weak: a general summary. Improved: a decision-oriented one-pager.",
+   "sort_order": 10
+  },
+  {
+   "scenario": "Customer complaint response",
+   "description": "Replying to an upset customer.",
+   "weak_prompt": "Reply to this complaint.",
+   "problems": [
+    "No complaint details.",
+    "No policy or offer.",
+    "No tone guidance."
+   ],
+   "improved_prompt": "Act as a senior customer-care specialist.\n\nContext:\nA customer is upset because a replacement part arrived two weeks late. Our policy is to acknowledge, take ownership and offer a remedy.\n\nTask:\nWrite a reply that acknowledges the problem, apologises sincerely, explains the next steps and offers a remedy.\n\nInput:\nCustomer message: [SOURCE TEXT]. Remedy options: expedited shipping or full refund within 5 working days.\n\nOutput format:\nAn email with a subject line and three short paragraphs, then an internal note listing facts to verify.\n\nConstraints:\n- Under 180 words.\n- No blame on the customer or colleagues.\n- Do not promise outside the remedy options.\n\nQuality criteria:\n- The specific issue is named.\n- The tone is warm, calm and professional.",
+   "improvements": [
+    "Added policy and remedy options.",
+    "Specified structure and tone.",
+    "Added internal verification note."
+   ],
+   "why_better": "The reply is personal and accountable and avoids unauthorised promises.",
+   "expected_difference": "Weak: a generic apology. Improved: a specific, policy-compliant reply.",
+   "sort_order": 11
+  },
+  {
+   "scenario": "Root-cause analysis",
+   "description": "Investigating a recurring problem.",
+   "weak_prompt": "Find the root cause of late invoices.",
+   "problems": [
+    "No data or history.",
+    "No method.",
+    "No distinction between symptoms and causes."
+   ],
+   "improved_prompt": "Act as a continuous-improvement analyst.\n\nContext:\nAbout 8% of invoices are paid late each month. Reminders did not help.\n\nTask:\nPerform a root-cause analysis with a 5 Whys chain and a fishbone grouping, then propose corrective and preventive actions.\n\nInput:\nFacts: [DATA]. Actions already tried: sent reminders to approvers.\n\nOutput format:\nSections: Problem statement, 5 Whys table, Fishbone table, Likely root causes, Corrective actions, Preventive actions.\n\nConstraints:\n- Label each cause 'Confirmed' or 'Hypothesis'.\n- Do not stop at human error.\n- Maximum one page.\n\nQuality criteria:\n- Each 'why' explains the previous answer.\n- Actions have owner roles.",
+   "improvements": [
+    "Added data and prior actions.",
+    "Specified the method.",
+    "Required labels for evidence."
+   ],
+   "why_better": "Labelled hypotheses prevent guesses from becoming conclusions.",
+   "expected_difference": "Weak: a list of obvious reasons. Improved: a structured analysis with verification needs.",
+   "sort_order": 12
+  },
+  {
+   "scenario": "Risk analysis",
+   "description": "Creating a risk register.",
+   "weak_prompt": "List the risks of my project.",
+   "problems": [
+    "No project information.",
+    "No scoring method.",
+    "No actions or owners."
+   ],
+   "improved_prompt": "Act as a risk-management specialist.\n\nContext:\nI manage a data-migration project in the testing phase. The vendor delivery is slipping and two key engineers will be away in June.\n\nTask:\nCreate a risk register with probability, impact, score, response strategy, action and owner role for each risk.\n\nInput:\nProject notes: [SOURCE TEXT].\n\nOutput format:\nA table (ID, Cause-Event-Consequence, Probability 1-5, Impact 1-5, Score, Strategy, Action, Owner role) sorted by score.\n\nConstraints:\n- Use the format 'Due to X, Y may occur, resulting in Z'.\n- Maximum 10 risks.\n- Mark scores as initial estimates.\n\nQuality criteria:\n- Risks are future events, not current issues.\n- Actions are concrete.",
+   "improvements": [
+    "Added project context.",
+    "Defined scoring.",
+    "Required owners and actions."
+   ],
+   "why_better": "The result can go straight into a governance meeting.",
+   "expected_difference": "Weak: a generic list. Improved: a scored, actionable register.",
+   "sort_order": 13
+  },
+  {
+   "scenario": "Research summary",
+   "description": "Summarising a research paper.",
+   "weak_prompt": "Summarize this paper.",
+   "problems": [
+    "No text or purpose.",
+    "No structure.",
+    "No rule against invented citations."
+   ],
+   "improved_prompt": "Act as a research analyst.\n\nContext:\nI need to decide whether the paper below is relevant to my review of remote-work productivity.\n\nTask:\nSummarise the research question, method, sample, findings with numbers, limitations and relevance to my purpose.\n\nInput:\nPaper text or abstract: [SOURCE TEXT].\n\nOutput format:\nHeadings: One-sentence summary, Question, Method, Findings, Limitations, Relevance (High/Medium/Low with reason).\n\nConstraints:\n- Use only the supplied text and write 'Not stated' for missing details.\n- No citations beyond the text.\n- Maximum 250 words.\n\nQuality criteria:\n- Findings include the key numbers.\n- Limitations are present.",
+   "improvements": [
+    "Defined purpose and sections.",
+    "Banned invented citations.",
+    "Added a relevance rating."
+   ],
+   "why_better": "The summary supports a decision and reduces fabricated details.",
+   "expected_difference": "Weak: a vague overview. Improved: a structured, verifiable summary.",
+   "sort_order": 14
+  },
+  {
+   "scenario": "Code troubleshooting",
+   "description": "Fixing a bug.",
+   "weak_prompt": "My code does not work, fix it.",
+   "problems": [
+    "No code, error or language.",
+    "No expected behaviour.",
+    "No test."
+   ],
+   "improved_prompt": "Act as a patient senior Python developer.\n\nContext:\nI get an error when processing a CSV file in Python 3.12. I want to understand the cause.\n\nTask:\nExplain the error, list likely causes ranked by probability, show how to confirm each and provide the smallest fix with a test.\n\nInput:\nError: KeyError 'customer_id'. Code: [CODE]. Expected: rows are grouped by customer. Already tried: checked the header.\n\nOutput format:\nSections: What the error means, Likely causes, How to confirm, Fix (code block), pytest test, Prevention.\n\nConstraints:\n- Do not guess library versions; ask if needed.\n- Provide the smallest fix.\n- No secrets in the code.\n\nQuality criteria:\n- Each cause has a confirmation step.\n- The fix addresses the root cause.",
+   "improvements": [
+    "Added the error, code and expectation.",
+    "Ranked causes with confirmation steps.",
+    "Asked for a test."
+   ],
+   "why_better": "It encourages diagnosis rather than trial and error.",
+   "expected_difference": "Weak: a guess. Improved: a ranked diagnosis, fix and test.",
+   "sort_order": 15
+  }
+ ]
+}

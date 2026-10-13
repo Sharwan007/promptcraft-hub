@@ -1,0 +1,19 @@
+{% from "partials/macros.html" import icon %}
+{% set lp = local_profile() %}
+<aside class="sidebar" id="sidebar" aria-label="Main navigation">
+  <a class="brand" href="/" aria-label="{{ app_name }} home">
+    <span class="brand-mark"><img src="/static/images/logo.svg" alt="" width="38" height="38"></span>
+    <span class="brand-text"><span class="brand-name">PromptCraft Hub</span><br><span class="brand-tag">Local prompt studio</span></span>
+  </a>
+  <nav>
+    <ul class="nav">
+      {% for key, url, label, ic in nav %}
+      <li><a href="{{ url }}" {% if active == key %}aria-current="page"{% endif %} title="{{ label }}">{{ icon(ic) }}<span class="label">{{ label }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+  <div class="sidebar-foot">
+    <div class="profile-chip"><span class="avatar" aria-hidden="true">{{ lp.display_name[:1]|upper }}</span><span class="foot-text"><strong>{{ lp.display_name }}</strong><br><span class="small">Local profile</span></span></div>
+    <div class="foot-text"><a href="/privacy">{{ icon('lock') }} Data stays on this computer</a><br><a href="/help">{{ icon('help') }} Help</a></div>
+  </div>
+</aside>

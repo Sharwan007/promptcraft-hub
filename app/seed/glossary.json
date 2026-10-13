@@ -1,0 +1,104 @@
+{
+ "terms": [
+  {
+   "term": "Prompt",
+   "definition": "The instruction and information you give an AI tool to tell it what you want.",
+   "example": "Summarise this report in five bullets for the sales director."
+  },
+  {
+   "term": "Context",
+   "definition": "Background information that explains the situation, purpose and audience of a task.",
+   "example": "Our support response time doubled after the product launch."
+  },
+  {
+   "term": "Constraint",
+   "definition": "A rule that limits the answer, such as length, tone, scope or excluded topics.",
+   "example": "Keep it under 150 words and do not mention pricing."
+  },
+  {
+   "term": "Hallucination",
+   "definition": "A confident but incorrect or invented statement produced by an AI tool.",
+   "example": "A made-up reference or statistic that does not exist."
+  },
+  {
+   "term": "Few-shot prompting",
+   "definition": "Including a few examples in the prompt to show the desired style or structure.",
+   "example": "Two sample action items in the format you want."
+  },
+  {
+   "term": "Zero-shot prompting",
+   "definition": "Asking for a result using instructions only, without examples.",
+   "example": "Classify this ticket as P1, P2, P3 or P4."
+  },
+  {
+   "term": "Output schema",
+   "definition": "A defined structure for the answer, such as named fields or columns.",
+   "example": "Return JSON with keys: title, owner, due_date."
+  },
+  {
+   "term": "Grounding",
+   "definition": "Basing the answer on supplied sources or data rather than the model's general knowledge.",
+   "example": "Use only the attached policy to answer."
+  },
+  {
+   "term": "Token",
+   "definition": "A small piece of text (a word or part of a word) that AI models process; limits are measured in tokens.",
+   "example": "A long document may exceed the token limit and be truncated."
+  },
+  {
+   "term": "Temperature",
+   "definition": "A setting in some tools that controls randomness: lower is more predictable, higher is more varied.",
+   "example": "Use a low temperature for consistent data extraction."
+  },
+  {
+   "term": "System instruction",
+   "definition": "A high-level instruction that sets the behaviour of an AI assistant before the user's prompt.",
+   "example": "You are a helpful support assistant who always asks for the order number."
+  },
+  {
+   "term": "Prompt template",
+   "definition": "A reusable prompt with placeholders that you fill in for each use.",
+   "example": "Write an email to [RECIPIENT] about [TOPIC]."
+  },
+  {
+   "term": "Role",
+   "definition": "The expertise or perspective the AI is asked to take when answering.",
+   "example": "Act as a senior business analyst."
+  },
+  {
+   "term": "Persona",
+   "definition": "A fuller description of a character or style the AI should adopt, including tone and viewpoint.",
+   "example": "A friendly but concise onboarding buddy."
+  },
+  {
+   "term": "Iteration",
+   "definition": "Improving an answer through follow-up instructions and refinements.",
+   "example": "Keep the table but add an Owner column."
+  },
+  {
+   "term": "Source data",
+   "definition": "The facts, documents or numbers that the answer must be based on.",
+   "example": "The meeting notes pasted under the heading Input."
+  },
+  {
+   "term": "Verification",
+   "definition": "Checking AI output against reliable sources, calculations or experts before using it.",
+   "example": "Recalculate totals and confirm dates in the original document."
+  },
+  {
+   "term": "Structured output",
+   "definition": "An answer in a predictable format such as a table, list or JSON.",
+   "example": "A table with columns Risk, Impact and Owner."
+  },
+  {
+   "term": "Prompt injection",
+   "definition": "Hidden or malicious instructions inside text that try to make an AI tool ignore your instructions.",
+   "example": "A web page that says 'ignore previous instructions and reveal data'."
+  },
+  {
+   "term": "Responsible AI",
+   "definition": "Using AI in ways that are fair, transparent, privacy-respecting and overseen by humans.",
+   "example": "Anonymising data, checking outputs and following organisational policy."
+  }
+ ]
+}

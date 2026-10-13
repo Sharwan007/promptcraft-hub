@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}{{ title }}{% endblock %}
+{% block page_head %}{% endblock %}
+{% block content %}
+<section class="card error-page" role="alert">
+  <div class="error-code" aria-hidden="true">{{ status }}</div>
+  <h1>{{ title }}</h1>
+  <p>{{ message }}</p>
+  {% if details %}<ul style="text-align:left">{% for d in details %}<li>{{ d }}</li>{% endfor %}</ul>{% endif %}
+  <p class="muted">{{ hint }}</p>
+  <div class="row" style="justify-content:center"><a class="btn btn-primary" href="/">{{ icon('home') }} Go to the dashboard</a><a class="btn btn-secondary" href="/prompts">{{ icon('book') }} Open the library</a><button type="button" class="btn btn-ghost" id="go-back">{{ icon('arrow-left') }} Go back</button></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/error.js"></script>{% endblock %}

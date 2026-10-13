@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Prompt Improver{% endblock %}
+{% block heading %}Prompt Improver{% endblock %}
+{% block subheading %}<p>Paste a prompt and get a structured, improved version with a clear list of what changed and why. Rule-based and local: no AI service or API key is used.</p>{% endblock %}
+{% block content %}
+{% include "partials/privacy_warning.html" %}
+<section class="card" aria-labelledby="in-h">
+  <h2 id="in-h">Your prompt</h2>
+  <form id="improve-form" novalidate>
+    <div class="field"><label for="prompt">Existing prompt</label><textarea class="textarea textarea-lg" id="prompt" name="prompt" maxlength="12000" placeholder="e.g. Write an email." required></textarea><div class="error-text" id="prompt-error" role="alert" hidden></div><div class="help"><span id="char-count">0</span> / 12,000 characters</div></div>
+    <details class="disclosure"><summary>Optional settings</summary><div>
+      <div class="form-row">
+        <div class="field"><label for="o-purpose">Intended purpose</label><select class="select" id="o-purpose"><option value="">Detect automatically</option>{% for k, l in purposes %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="o-audience">Target audience</label><input class="input" id="o-audience" maxlength="200" placeholder="e.g. project sponsor"></div>
+        <div class="field"><label for="o-tool">Preferred AI tool</label><select class="select" id="o-tool"><option value="">Any</option>{% for t in tools %}<option>{{ t }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="o-format">Output type</label><select class="select" id="o-format"><option value="">Default for the task</option>{% for k, l in formats %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="o-tone">Tone</label><input class="input" id="o-tone" maxlength="120" placeholder="e.g. warm and professional"></div>
+        <div class="field"><label for="o-words">Word limit</label><input class="input" id="o-words" maxlength="10" inputmode="numeric" placeholder="e.g. 150"></div>
+        <div class="field"><label for="o-detail">Level of detail</label><select class="select" id="o-detail"><option value="">Standard</option><option value="concise">Concise</option><option value="standard">Balanced</option><option value="detailed">Detailed</option></select></div>
+      </div></div></details>
+    <div class="row"><button class="btn btn-primary btn-lg" type="submit" id="improve-btn">{{ icon('sparkles') }} Improve prompt</button><button class="btn btn-secondary" type="button" id="sample-btn">{{ icon('file') }} Load sample</button><button class="btn btn-ghost" type="button" id="clear-btn">{{ icon('x') }} Clear</button></div>
+  </form>
+</section>
+
+<section id="result" class="section" hidden aria-live="polite" aria-labelledby="res-h">
+  <h2 id="res-h">Result</h2>
+  <div class="card">
+    <div class="score-compare">
+      <div class="center"><div id="ring-before"></div><div class="small muted">Original</div></div>
+      <span class="arrow" aria-hidden="true">{{ icon('arrow-right') }}</span>
+      <div class="center"><div id="ring-after"></div><div class="small muted">Improved</div></div>
+      <div class="grow"><p id="score-summary" style="margin:0"></p><p class="small muted" id="provider-note" style="margin:.3rem 0 0"></p></div>
+    </div>
+  </div>
+  <div class="compare section" style="margin-top:1rem">
+    <div class="card col"><h3>Original prompt</h3><pre class="prompt-box" id="orig-text"></pre></div>
+    <div class="card col"><h3>Improved prompt <span class="row"><button type="button" class="btn btn-secondary btn-sm" id="edit-btn">{{ icon('edit') }} Edit</button></span></h3>
+      <pre class="prompt-box" id="imp-text"></pre>
+      <textarea class="textarea textarea-lg mono" id="imp-edit" hidden aria-label="Edit improved prompt"></textarea>
+      <div class="row" id="edit-actions" hidden style="margin-top:.5rem"><button type="button" class="btn btn-primary btn-sm" id="rescore-btn">{{ icon('refresh') }} Apply and re-score</button><button type="button" class="btn btn-ghost btn-sm" id="cancel-edit">Cancel</button></div>
+    </div>
+  </div>
+  <div class="row no-print" style="margin-top:1rem">
+    <button type="button" class="btn btn-primary" id="copy-btn">{{ icon('copy') }} Copy improved prompt</button>
+    <button type="button" class="btn btn-secondary" id="save-btn">{{ icon('folder') }} Save improved prompt</button>
+    <div class="dropdown"><button type="button" class="btn btn-secondary" data-dropdown aria-haspopup="true" aria-expanded="false">{{ icon('download') }} Export {{ icon('chevron-down') }}</button>
+      <div class="dropdown-menu" hidden><button type="button" data-export="txt">Text (.txt)</button><button type="button" data-export="md">Markdown (.md)</button><button type="button" data-export="json">JSON (.json)</button></div></div>
+    <a class="btn btn-secondary" href="/diagnostic" id="to-diagnostic">{{ icon('stethoscope') }} Diagnose it</a>
+    <button type="button" class="btn btn-ghost" id="restart-btn">{{ icon('undo') }} Start over</button>
+  </div>
+  <div class="grid grid-2 section" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+    <div class="card"><h3>Missing components in your original</h3><ul id="missing-list"></ul></div>
+    <div class="card"><h3>Notes</h3><ul id="notes-list"></ul><div id="placeholder-note"></div></div>
+  </div>
+  <div class="card section"><h3>Changes made and why they help</h3><div id="changes"></div></div>
+  <div class="card section"><h3>Score breakdown (improved prompt)</h3><div id="breakdown"></div></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/improver.js"></script>{% endblock %}

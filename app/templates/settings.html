@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Settings{% endblock %}
+{% block heading %}Settings{% endblock %}
+{% block subheading %}<p>Your local profile and preferences. Nothing leaves this computer.</p>{% endblock %}
+{% block content %}
+<div class="grid grid-2" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
+  <section class="card" aria-labelledby="pf-h"><h2 id="pf-h">Profile and preferences</h2>
+    <form id="settings-form" novalidate>
+      <div class="field"><label for="s-name">Display name</label><input class="input" id="s-name" maxlength="80" value="{{ profile.display_name }}" required><div class="error-text" id="s-name-err" role="alert" hidden></div></div>
+      <div class="field"><label for="s-role">Your role (optional)</label><input class="input" id="s-role" maxlength="80" value="{{ profile.role }}"></div>
+      <div class="field"><label for="s-theme">Theme</label><select class="select" id="s-theme">{% for v, l in [('system', 'Match my system'), ('light', 'Light'), ('dark', 'Dark')] %}<option value="{{ v }}" {{ 'selected' if profile.theme == v }}>{{ l }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="s-view">Library layout</label><select class="select" id="s-view">{% for v, l in [('grid', 'Grid'), ('list', 'List')] %}<option value="{{ v }}" {{ 'selected' if profile.view_mode == v }}>{{ l }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="s-tool">Default AI tool</label><select class="select" id="s-tool">{% for t in tools %}<option {{ 'selected' if profile.default_ai_tool == t }}>{{ t }}</option>{% endfor %}</select></div>
+      <button class="btn btn-primary" type="submit">{{ icon('save') }} Save settings</button>
+    </form>
+  </section>
+  <section class="card" aria-labelledby="data-h"><h2 id="data-h">Your data</h2>
+    <dl class="kv"><dt>Database file</dt><dd class="mono small">{{ db_path }}</dd><dt>Backups folder</dt><dd class="mono small">{{ backup_path }}</dd><dt>Log files</dt><dd class="mono small">{{ log_path }}</dd></dl>
+    <p class="help">Protect database backups like any other file that may contain your saved prompts.</p>
+    <hr>
+    <h3>Reset personal data</h3>
+    <div class="row">
+      <button type="button" class="btn btn-secondary" id="reset-progress">{{ icon('undo') }} Reset learning progress</button>
+      <button type="button" class="btn btn-secondary" id="clear-drafts">{{ icon('trash') }} Clear saved builder draft</button>
+    </div>
+    <p class="help">Library prompts, favorites and My Prompts are not affected.</p>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/settings.js"></script>{% endblock %}

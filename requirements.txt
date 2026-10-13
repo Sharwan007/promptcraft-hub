@@ -1,0 +1,16 @@
+# PromptCraft Hub - Python dependencies (installed automatically by the .bat scripts).
+# Versions are the ones the project was validated with.
+fastapi==0.143.0
+uvicorn==0.54.0
+SQLAlchemy==2.1.4
+pydantic==2.14.1
+pydantic-settings==2.15.0
+Jinja2==3.1.6
+MarkupSafe==3.0.4
+starlette==1.7.0
+python-multipart==0.0.32
+itsdangerous==2.2.0
+python-dotenv==1.2.4
+# Test dependencies (also installed by run_tests.bat)
+pytest==9.1.1
+httpx==0.28.1

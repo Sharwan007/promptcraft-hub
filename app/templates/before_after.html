@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon, score_ring %}
+{% block title %}Before & After{% endblock %}
+{% block heading %}Before &amp; After{% endblock %}
+{% block subheading %}<p>See how a weak prompt becomes a strong one. Each example shows the problems, the improvements, why the result is better and the score comparison.</p>{% endblock %}
+{% block content %}
+<nav aria-label="Jump to an example" class="card"><div class="toc">{% for e in examples %}<a class="tag" href="#ex-{{ e.slug }}">{{ e.scenario }}</a>{% endfor %}</div></nav>
+{% for e in examples %}
+<article class="ba-item" id="ex-{{ e.slug }}" data-example-id="{{ e.id }}">
+  <div class="card">
+    <div class="card-head"><h2>{{ loop.index }}. {{ e.scenario }}</h2>
+      <div class="score-compare"><span class="badge badge-missing">Weak {{ e.weak_score }}/100</span><span aria-hidden="true">{{ icon('arrow-right') }}</span><span class="badge badge-present">Improved {{ e.improved_score }}/100</span><span class="badge badge-cat">+{{ e.improved_score - e.weak_score }} points</span></div></div>
+    {% if e.description %}<p class="muted">{{ e.description }}</p>{% endif %}
+    <div class="compare">
+      <div class="card card-flat ba-weak col"><h3>{{ icon('x-circle') }} Weak prompt</h3><pre class="prompt-box" data-weak>{{ e.weak_prompt }}</pre>
+        <h4 style="margin-top:1rem">Problems</h4><ul>{% for p in e.problems %}<li>{{ p }}</li>{% endfor %}</ul>
+        <button type="button" class="btn btn-secondary btn-sm" data-diagnose-weak>{{ icon('stethoscope') }} Diagnose weak prompt</button></div>
+      <div class="card card-flat ba-good col"><h3>{{ icon('check-circle') }} Improved prompt</h3><pre class="prompt-box" data-improved>{{ e.improved_prompt|placeholders }}</pre>
+        <h4 style="margin-top:1rem">Improvements made</h4><ul>{% for p in e.improvements %}<li>{{ p }}</li>{% endfor %}</ul>
+        <div class="row"><button type="button" class="btn btn-primary btn-sm" data-copy-prompt="{{ e.improved_prompt }}">{{ icon('copy') }} Copy improved prompt</button><button type="button" class="btn btn-secondary btn-sm" data-try-builder>{{ icon('wand') }} Try in Prompt Builder</button></div></div>
+    </div>
+    <div class="grid grid-2 section" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <div><h3>Why the improved version is better</h3><p>{{ e.why_better }}</p></div>
+      <div><h3>Expected difference in output</h3><p>{{ e.expected_difference }}</p></div>
+    </div>
+  </div>
+</article>
+{% else %}
+<div class="empty">{{ icon('columns') }}<h3>No examples yet</h3><p>An administrator can add Before &amp; After examples.</p></div>
+{% endfor %}
+{% endblock %}
+{% block scripts %}<script src="/static/js/before_after.js"></script>{% endblock %}

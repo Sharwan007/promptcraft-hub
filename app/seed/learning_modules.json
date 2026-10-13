@@ -1,0 +1,692 @@
+{
+ "modules": [
+  {
+   "number": 1,
+   "title": "What is a prompt?",
+   "summary": "The instruction you give an AI tool, and why its wording shapes the answer.",
+   "objective": "Explain what a prompt is and identify its basic parts.",
+   "explanation": "A prompt is the text you give an AI tool to tell it what you want. The tool predicts a useful response based on your words, so it can only work with what you provide. It does not know your project, your audience or your standards unless you tell it.\n\nA useful prompt usually has seven parts, which PromptCraft Hub calls the Prompt Blueprint: Role, Context, Task, Input, Output format, Constraints and Quality criteria. You do not need all seven every time, but the more important the result, the more of them you should include.",
+   "good_example": "Act as a project manager. Context: our CRM migration is two weeks late. Task: write a status email to the sponsor explaining the delay and two recovery options. Output: subject line plus 120-word body. Tone: professional and direct.",
+   "weak_example": "Write about the delay.",
+   "tips": [
+    "Think of a prompt as a briefing to a capable new colleague who knows nothing about your situation.",
+    "Start with the task, then add whatever the colleague would ask you about.",
+    "Read your prompt back and ask: could someone else produce the right answer from this alone?"
+   ],
+   "common_mistakes": [
+    "Assuming the AI knows your company or project.",
+    "Asking for several unrelated things in one prompt.",
+    "Treating the first answer as final."
+   ],
+   "checks": [
+    {
+     "question": "Which statement best describes a prompt?",
+     "options": [
+      "A secret command that unlocks hidden features",
+      "The instruction and information you give an AI tool",
+      "A setting inside the AI model",
+      "A programming language"
+     ],
+     "correct_index": 1,
+     "explanation": "A prompt is simply the instruction and information you provide."
+    },
+    {
+     "question": "Why might an AI answer miss the point?",
+     "options": [
+      "It was given too little context",
+      "It dislikes the topic",
+      "The keyboard layout was wrong",
+      "Prompts have no influence"
+     ],
+     "correct_index": 0,
+     "explanation": "Missing context is the most common reason for a generic answer."
+    }
+   ]
+  },
+  {
+   "number": 2,
+   "title": "Why prompt quality matters",
+   "summary": "Clear prompts save time, reduce errors and make results repeatable.",
+   "objective": "Describe how prompt quality changes the quality, accuracy and usefulness of results.",
+   "explanation": "AI tools give different answers to different wording. A vague prompt forces the tool to guess your goal, audience and format, and guesses are often generic or wrong. A precise prompt narrows the possibilities so the first answer is closer to what you need.\n\nBetter prompts also save time. Five minutes spent defining the task and format often removes several rounds of corrections. For recurring work, a good prompt becomes a reusable template that gives consistent results for the whole team.",
+   "good_example": "Summarise the attached incident report for the operations director in five bullets: what happened, impact, cause, fix, and what we need from them. Use only the report; say 'not stated' if something is missing.",
+   "weak_example": "Summarise this.",
+   "tips": [
+    "Judge a prompt by the effort it saves after the answer arrives, not by how short it is.",
+    "Save prompts that worked as templates.",
+    "Add a rule for missing information so the tool does not invent details."
+   ],
+   "common_mistakes": [
+    "Believing longer is always better; irrelevant detail also hurts.",
+    "Never saving good prompts.",
+    "Blaming the tool without checking the prompt."
+   ],
+   "checks": [
+    {
+     "question": "What is the main benefit of a precise prompt?",
+     "options": [
+      "It makes the AI faster",
+      "It reduces guessing and rework",
+      "It hides mistakes",
+      "It removes the need to check answers"
+     ],
+     "correct_index": 1,
+     "explanation": "Precision reduces guessing, so fewer corrections are needed."
+    },
+    {
+     "question": "Which is the better habit for recurring tasks?",
+     "options": [
+      "Retyping from memory",
+      "Saving a tested prompt as a template",
+      "Using the shortest possible wording",
+      "Asking for random variations"
+     ],
+     "correct_index": 1,
+     "explanation": "Templates make results consistent and save time."
+    }
+   ]
+  },
+  {
+   "number": 3,
+   "title": "Defining the AI role",
+   "summary": "Telling the AI what expertise and perspective to use.",
+   "objective": "Write a role statement that improves vocabulary, depth and perspective.",
+   "explanation": "A role tells the AI which expertise and viewpoint to adopt: 'Act as a senior business analyst' leads to different wording and structure than 'Act as a marketing copywriter'. A good role is specific to the task and the level of expertise you need.\n\nA role does not give the AI new knowledge or authority. It guides style, vocabulary and structure. You still need to provide facts, and you still need to verify the output.",
+   "good_example": "Act as a customer-care team leader experienced in handling escalated complaints for a logistics company.",
+   "weak_example": "You are the best expert in the world.",
+   "tips": [
+    "Combine job title, experience area and the audience they write for.",
+    "Match the role to the deliverable.",
+    "If the answer feels too academic or too casual, adjust the role first."
+   ],
+   "common_mistakes": [
+    "Using flattering but empty roles such as 'genius'.",
+    "Choosing a role unrelated to the task.",
+    "Assuming a role guarantees correct facts."
+   ],
+   "checks": [
+    {
+     "question": "What does a role mainly influence?",
+     "options": [
+      "Facts the tool knows",
+      "Perspective, vocabulary and structure",
+      "The internet speed",
+      "The data privacy of your input"
+     ],
+     "correct_index": 1,
+     "explanation": "A role guides how the answer is written, not what is true."
+    },
+    {
+     "question": "Which is the strongest role statement?",
+     "options": [
+      "Act as an expert",
+      "Act as a senior SQL developer who reviews queries for SQL Server",
+      "Act as the best",
+      "Act as AI"
+     ],
+     "correct_index": 1,
+     "explanation": "It names the expertise, the task type and the platform."
+    }
+   ]
+  },
+  {
+   "number": 4,
+   "title": "Adding useful context",
+   "summary": "Giving the situation, purpose and background the AI cannot guess.",
+   "objective": "Identify what context is needed and what should be left out.",
+   "explanation": "Context answers the questions a human expert would ask before starting: Who is this for? What is the situation? Why is it needed? What has already happened? Without context the AI fills the gaps with general assumptions.\n\nInclude context that changes the answer. A project's name rarely matters; the fact that the sponsor is angry about a delay does. Keep it concise and relevant, and never paste confidential data into a tool your organisation has not approved.",
+   "good_example": "Context: Our customer-support team handles about 400 tickets a day. Average response time rose from 4 to 9 hours after a product launch. The director wants options before Friday's review.",
+   "weak_example": "Our support is slow, help.",
+   "tips": [
+    "State the goal behind the task: 'so that the director can decide...'.",
+    "Include constraints from the real world, such as budget or deadlines.",
+    "Remove personal or confidential details."
+   ],
+   "common_mistakes": [
+    "Giving background that does not affect the answer.",
+    "Leaving out the purpose of the task.",
+    "Pasting sensitive data."
+   ],
+   "checks": [
+    {
+     "question": "Which context is most useful?",
+     "options": [
+      "The company's founding year",
+      "The purpose and audience of the result",
+      "The colour of the report",
+      "Your favourite tool"
+     ],
+     "correct_index": 1,
+     "explanation": "Purpose and audience change what a good answer looks like."
+    },
+    {
+     "question": "What should you do with confidential data?",
+     "options": [
+      "Paste it anyway",
+      "Remove or anonymise it unless the tool is approved",
+      "Translate it",
+      "Add more of it"
+     ],
+     "correct_index": 1,
+     "explanation": "Only use approved tools for sensitive information."
+    }
+   ]
+  },
+  {
+   "number": 5,
+   "title": "Writing a clear task",
+   "summary": "One action verb, a defined deliverable and a clear scope.",
+   "objective": "Write a task statement that names the action, deliverable and scope.",
+   "explanation": "The task is the heart of the prompt. A clear task starts with an action verb (write, compare, extract, classify), names the deliverable (an email, a table, a query) and sets the scope (what to include or ignore).\n\nIf you need several things, number them or split them into steps. One task per prompt, or clearly separated sub-tasks, gives better results than a long paragraph with mixed requests.",
+   "good_example": "Compare the two vendor proposals on price, delivery time, support terms and risks, then recommend one in three sentences.",
+   "weak_example": "Look at these vendors and tell me about them.",
+   "tips": [
+    "Start with the verb.",
+    "Name the deliverable, such as 'table' or 'email'.",
+    "Put multi-part tasks in a numbered list."
+   ],
+   "common_mistakes": [
+    "Using vague verbs like 'look at' or 'handle'.",
+    "Mixing two goals in one sentence.",
+    "Not stating what a finished result looks like."
+   ],
+   "checks": [
+    {
+     "question": "Which task statement is clearest?",
+     "options": [
+      "Help with my report",
+      "Write a one-page summary of the audit findings for the finance director",
+      "Report things",
+      "Do something with the audit"
+     ],
+     "correct_index": 1,
+     "explanation": "It has a verb, a deliverable, a scope and an audience."
+    },
+    {
+     "question": "What is the best way to ask for several outputs?",
+     "options": [
+      "One long sentence",
+      "A numbered list of sub-tasks",
+      "Several unrelated prompts at once",
+      "No structure"
+     ],
+     "correct_index": 1,
+     "explanation": "Numbering makes each requirement explicit."
+    }
+   ]
+  },
+  {
+   "number": 6,
+   "title": "Providing inputs and examples",
+   "summary": "Showing the AI the material to work with and what good looks like.",
+   "objective": "Supply source material and examples in a way the AI can use.",
+   "explanation": "Inputs are the facts, text, data or notes the answer must be based on. Put them in a clearly separated block, for example under the heading 'Input:' or between lines of dashes. Tell the AI to use only that material when accuracy matters.\n\nExamples show the style or structure you want. One or two short examples (few-shot prompting) are often more effective than a long description. Without examples (zero-shot prompting) you rely on the instructions alone.",
+   "good_example": "Input (between the dashes): ---[PASTE MEETING NOTES]--- Example of the action format I want: 'A1 | Update the plan | Maya | 12 May'.",
+   "weak_example": "Here are some notes, make them better.",
+   "tips": [
+    "Separate instructions from inputs with headings or delimiters.",
+    "Add 'Use only the information above'.",
+    "Give one example of the format you want."
+   ],
+   "common_mistakes": [
+    "Mixing instructions with pasted text so the tool cannot tell them apart.",
+    "Providing examples that contradict the instructions.",
+    "Giving too much unrelated input."
+   ],
+   "checks": [
+    {
+     "question": "What is few-shot prompting?",
+     "options": [
+      "Asking several times",
+      "Including a few examples in the prompt",
+      "Using a short prompt",
+      "Asking for a short answer"
+     ],
+     "correct_index": 1,
+     "explanation": "Few-shot means you show examples of the desired output."
+    },
+    {
+     "question": "Why separate inputs with delimiters?",
+     "options": [
+      "It looks nicer",
+      "So the AI can distinguish instructions from material",
+      "It makes answers longer",
+      "It is required by every tool"
+     ],
+     "correct_index": 1,
+     "explanation": "Clear separation reduces confusion about what to follow."
+    }
+   ]
+  },
+  {
+   "number": 7,
+   "title": "Choosing an output format",
+   "summary": "Specifying the structure so the result is ready to use.",
+   "objective": "Select and describe an output format for a task.",
+   "explanation": "If you do not choose a format, the AI chooses for you, and it may not suit your next step. Decide how you will use the answer: paste into an email, import into Excel, show in a meeting. Then ask for that structure: a table with named columns, numbered steps, JSON with given keys, or an email with a subject line.\n\nFor structured output, name the fields and the order. If the result will be read by a program, ask for valid JSON only and state the schema.",
+   "good_example": "Return a table with columns: Risk, Cause, Impact (High/Medium/Low), Mitigation, Owner. Then add a three-bullet summary.",
+   "weak_example": "Give me the risks.",
+   "tips": [
+    "Name columns, headings or fields.",
+    "Say what to do when information is missing, for example 'Not stated'.",
+    "Ask for a short summary before or after long output."
+   ],
+   "common_mistakes": [
+    "Asking for 'a table' without columns.",
+    "Forgetting the length.",
+    "Using a format that your next tool cannot read."
+   ],
+   "checks": [
+    {
+     "question": "When should you ask for JSON?",
+     "options": [
+      "When a program will read the answer",
+      "Always",
+      "Never",
+      "When writing emails"
+     ],
+     "correct_index": 0,
+     "explanation": "JSON is helpful for machine-readable output."
+    },
+    {
+     "question": "What makes a table request better?",
+     "options": [
+      "Naming the columns",
+      "Making it longer",
+      "Using capital letters",
+      "Adding emojis"
+     ],
+     "correct_index": 0,
+     "explanation": "Named columns define the structure."
+    }
+   ]
+  },
+  {
+   "number": 8,
+   "title": "Adding constraints",
+   "summary": "Boundaries on length, tone, scope and what to avoid.",
+   "objective": "Add constraints that improve results without over-restricting the AI.",
+   "explanation": "Constraints set the boundaries of a good answer: word limits, tone, audience, reading level, language, number of options, topics to exclude, required sections and data-handling rules. They reduce the chance that you get something unusable.\n\nUse constraints that matter and make them testable: 'under 150 words' is better than 'short'. Avoid contradictions such as 'be extremely detailed but under 50 words'. The PromptCraft Hub diagnostic flags such conflicts.",
+   "good_example": "Constraints: under 150 words; professional but friendly tone; no jargon; do not mention pricing; end with one clear question.",
+   "weak_example": "Make it short but detailed and also comprehensive.",
+   "tips": [
+    "Prefer measurable limits.",
+    "State exclusions explicitly.",
+    "Check for conflicting instructions before you send."
+   ],
+   "common_mistakes": [
+    "Contradictory constraints.",
+    "Too many constraints that crowd out the task.",
+    "Vague limits like 'short'."
+   ],
+   "checks": [
+    {
+     "question": "Which constraint is testable?",
+     "options": [
+      "Keep it brief",
+      "Under 150 words",
+      "Make it nice",
+      "Be good"
+     ],
+     "correct_index": 1,
+     "explanation": "A word limit can be checked."
+    },
+    {
+     "question": "Which pair of instructions conflicts?",
+     "options": [
+      "Professional tone and under 150 words",
+      "Very detailed and under 50 words",
+      "Use bullets and add a title",
+      "Include sources and a summary"
+     ],
+     "correct_index": 1,
+     "explanation": "Great detail cannot fit in 50 words."
+    }
+   ]
+  },
+  {
+   "number": 9,
+   "title": "Defining quality criteria",
+   "summary": "Saying how a good answer will be judged, and asking for verification.",
+   "objective": "Write quality criteria that make answers checkable and more trustworthy.",
+   "explanation": "Quality criteria describe what a good answer looks like: accurate, complete, concise, suitable for the audience, free from invented facts. Stating them gives the AI a target and gives you a checklist.\n\nFor analysis or advice, ask for transparency instead of hidden reasoning: request a concise explanation of the recommendation, the assumptions made, verification steps you can take, and sources or the part of the input each claim comes from. Do not ask the tool to reveal private internal reasoning; ask for a short, checkable justification.",
+   "good_example": "Quality criteria: use only the supplied data; list your assumptions; give a two-sentence rationale for each recommendation; end with three checks I can run to verify the numbers.",
+   "weak_example": "Make sure it is right.",
+   "tips": [
+    "Ask for assumptions and open questions.",
+    "Request verification steps you can perform.",
+    "Ask for sources or the exact part of the input used."
+   ],
+   "common_mistakes": [
+    "Asking 'be accurate' without saying how to check.",
+    "Trusting numbers without recalculating.",
+    "Requesting hidden reasoning instead of a clear explanation."
+   ],
+   "checks": [
+    {
+     "question": "Which request supports verification?",
+     "options": [
+      "Trust yourself",
+      "List your assumptions and checks I can run",
+      "Be creative",
+      "Skip explanations"
+     ],
+     "correct_index": 1,
+     "explanation": "Assumptions and checks make answers reviewable."
+    },
+    {
+     "question": "What should you ask for instead of hidden reasoning?",
+     "options": [
+      "A concise explanation of the result",
+      "Nothing",
+      "Longer answers",
+      "Fewer facts"
+     ],
+     "correct_index": 0,
+     "explanation": "A short justification can be reviewed."
+    }
+   ]
+  },
+  {
+   "number": 10,
+   "title": "Iterative prompting",
+   "summary": "Improving the answer through short follow-up instructions.",
+   "objective": "Use follow-up prompts to refine, correct and extend a result.",
+   "explanation": "Iteration means improving the answer step by step. Review the first answer, identify what is wrong or missing, and give targeted feedback: 'Shorten to 100 words', 'Add a risk column', 'Use a more formal tone'. One change at a time shows which instruction caused which effect.\n\nIf the conversation becomes long and confused, start a new one with an improved prompt that includes what you learned. Keep the final prompt as a template.",
+   "good_example": "Good, now keep the table but add a column 'Owner role', remove rows about pricing and shorten each cell to ten words.",
+   "weak_example": "No, wrong, again.",
+   "tips": [
+    "Say what to keep as well as what to change.",
+    "Change one thing at a time.",
+    "Rewrite the original prompt when you find a pattern."
+   ],
+   "common_mistakes": [
+    "Repeating the same prompt hoping for a different result.",
+    "Vague feedback.",
+    "Not saving the improved prompt."
+   ],
+   "checks": [
+    {
+     "question": "What is good feedback in iteration?",
+     "options": [
+      "Wrong",
+      "Keep the table, add an Owner column, shorten cells",
+      "Again",
+      "Better"
+     ],
+     "correct_index": 1,
+     "explanation": "Specific changes lead to specific improvements."
+    },
+    {
+     "question": "When should you restart the conversation?",
+     "options": [
+      "Never",
+      "When it has become confused and you know a better prompt",
+      "After every answer",
+      "Only after errors on Fridays"
+     ],
+     "correct_index": 1,
+     "explanation": "A clean start with a better prompt often works best."
+    }
+   ]
+  },
+  {
+   "number": 11,
+   "title": "Avoiding ambiguous instructions",
+   "summary": "Replacing vague words with measurable, concrete requirements.",
+   "objective": "Recognise and rewrite ambiguous wording.",
+   "explanation": "Words such as 'good', 'nice', 'professional', 'better', 'some' and 'etc.' mean different things to different people, and to AI tools. Ambiguity makes the answer a guess. Replace vague words with specifics: numbers, examples, named audiences and criteria.\n\nAlso watch for unclear references. 'Improve it' may refer to several things. Name the thing: 'Improve the second paragraph of the email'.",
+   "good_example": "Rewrite the second paragraph so that it is under 40 words, uses active voice and states the deadline of 15 May.",
+   "weak_example": "Make it better and more professional, etc.",
+   "tips": [
+    "Replace adjectives with measurable rules.",
+    "Name what 'it' refers to.",
+    "Use the Diagnostic tool to find vague wording."
+   ],
+   "common_mistakes": [
+    "Using 'etc.' to avoid thinking.",
+    "Pronouns without clear subject.",
+    "Subjective words without criteria."
+   ],
+   "checks": [
+    {
+     "question": "Which wording is least ambiguous?",
+     "options": [
+      "Make it nicer",
+      "Reduce to 80 words and use active voice",
+      "Improve it",
+      "Make it pop"
+     ],
+     "correct_index": 1,
+     "explanation": "It gives measurable instructions."
+    },
+    {
+     "question": "What is wrong with 'Improve it'?",
+     "options": [
+      "Nothing",
+      "'It' and 'improve' are unclear",
+      "It is too long",
+      "It uses a verb"
+     ],
+     "correct_index": 1,
+     "explanation": "Neither the object nor the standard of improvement is defined."
+    }
+   ]
+  },
+  {
+   "number": 12,
+   "title": "Working with long documents",
+   "summary": "Handling reports, contracts and transcripts without losing accuracy.",
+   "objective": "Process long material in structured steps.",
+   "explanation": "Long documents can exceed what a tool can read in one go, and details in the middle may be overlooked. Work in layers: first ask for an outline, then summarise section by section, and finally combine results. Tell the AI to use only the document and to point to the section behind each statement.\n\nAlways check important figures and obligations against the original. Remove personal and confidential information first, and use only tools your organisation has approved.",
+   "good_example": "Step 1: list the sections and their purpose. Step 2: for section 3 only, extract all dates and obligations in a table with the paragraph number. Use only the document.",
+   "weak_example": "Summarise this 80-page contract.",
+   "tips": [
+    "Work section by section.",
+    "Ask for references to sections or page numbers.",
+    "Verify key facts against the source."
+   ],
+   "common_mistakes": [
+    "Pasting everything and trusting a single summary.",
+    "Skipping verification.",
+    "Sharing confidential contracts with unapproved tools."
+   ],
+   "checks": [
+    {
+     "question": "What is a good strategy for long documents?",
+     "options": [
+      "One giant prompt",
+      "Outline first, then section by section",
+      "Ask for a guess",
+      "Skip reading"
+     ],
+     "correct_index": 1,
+     "explanation": "Layered processing improves accuracy."
+    },
+    {
+     "question": "Why ask for section references?",
+     "options": [
+      "To increase length",
+      "To make claims verifiable",
+      "For decoration",
+      "To confuse"
+     ],
+     "correct_index": 1,
+     "explanation": "References help you check statements against the source."
+    }
+   ]
+  },
+  {
+   "number": 13,
+   "title": "Prompts for data analysis",
+   "summary": "Asking for plans, methods and checks, not just conclusions.",
+   "objective": "Write prompts that support careful, reviewable data analysis.",
+   "explanation": "For data tasks, describe the business question, the data fields, the definition of the metric and the output you need. Ask the AI to state assumptions and to separate observations from hypotheses. When numbers matter, ask for the calculation method so you can reproduce it in Excel or SQL.\n\nAI tools can make arithmetic or logic mistakes and may not see your full dataset. Treat results as drafts to verify, and never paste personal or confidential data into unapproved tools.",
+   "good_example": "Business question: why did repeat purchases fall in Q2? Fields: customer_id, order_date, channel. Propose three hypotheses, the check for each as an SQL query, and what result would confirm it.",
+   "weak_example": "Analyse my sales data.",
+   "tips": [
+    "Describe the columns and metric definitions.",
+    "Ask for the method so you can reproduce it.",
+    "Ask for data-quality checks before conclusions."
+   ],
+   "common_mistakes": [
+    "Asking for conclusions without data description.",
+    "Trusting calculations without checks.",
+    "Sharing sensitive data."
+   ],
+   "checks": [
+    {
+     "question": "What should you ask alongside a number?",
+     "options": [
+      "Nothing",
+      "How it was calculated",
+      "A joke",
+      "To hide the formula"
+     ],
+     "correct_index": 1,
+     "explanation": "The method lets you reproduce and verify the result."
+    },
+    {
+     "question": "What is a safe approach with analysis?",
+     "options": [
+      "Treat results as drafts to verify",
+      "Publish immediately",
+      "Ignore assumptions",
+      "Use only one data point"
+     ],
+     "correct_index": 0,
+     "explanation": "Verification catches errors."
+    }
+   ]
+  },
+  {
+   "number": 14,
+   "title": "Prompts for business communication",
+   "summary": "Emails, updates and reports with the right audience, tone and call to action.",
+   "objective": "Write prompts that produce clear, appropriate business messages.",
+   "explanation": "Business writing depends on audience, purpose and tone. Tell the AI who will read the message, what you want them to do and how formal the tone should be. Provide the facts and ask the AI not to add new ones.\n\nAsk for the key message first, a clear request and a suitable length. Always review for accuracy, tone and confidentiality before sending; you remain responsible for the message.",
+   "good_example": "Write an email to the project sponsor. Facts: delay of two weeks, cause vendor late delivery, two recovery options. Start with the key message, keep it under 150 words, tone professional and calm, end with a decision request by Friday.",
+   "weak_example": "Write an email about the delay.",
+   "tips": [
+    "Name the reader and what you need from them.",
+    "Give facts and forbid invented ones.",
+    "Ask for a subject line."
+   ],
+   "common_mistakes": [
+    "Not stating the call to action.",
+    "Sending without review.",
+    "Letting the AI add promises."
+   ],
+   "checks": [
+    {
+     "question": "What should a business-message prompt include?",
+     "options": [
+      "Audience and desired action",
+      "Only the topic",
+      "A random fact",
+      "A smiley"
+     ],
+     "correct_index": 0,
+     "explanation": "Audience and action shape tone and structure."
+    },
+    {
+     "question": "Who is responsible for a message sent using AI help?",
+     "options": [
+      "The AI",
+      "The sender",
+      "Nobody",
+      "The vendor"
+     ],
+     "correct_index": 1,
+     "explanation": "You are responsible for what you send."
+    }
+   ]
+  },
+  {
+   "number": 15,
+   "title": "Prompts for coding",
+   "summary": "Giving language, versions, code and error details to get useful help.",
+   "objective": "Write prompts that produce correct, reviewable code help.",
+   "explanation": "Good coding prompts name the language and versions, show the relevant code and error message, explain expected and actual behaviour and say what you already tried. Ask for the smallest fix, an explanation and a way to test it.\n\nGenerated code can contain bugs or insecure patterns. Review it, run tests and never paste secrets, keys or customer data. Respect your organisation's rules about sharing source code with external tools.",
+   "good_example": "Language: Python 3.12. Expected: the function returns None for empty input. Actual: KeyError 'id'. Code: [CODE]. Provide the minimal fix, why it fails and a pytest test.",
+   "weak_example": "My code does not work, fix it.",
+   "tips": [
+    "Include versions and the full error message.",
+    "Ask for tests with the fix.",
+    "Remove secrets first."
+   ],
+   "common_mistakes": [
+    "Pasting credentials.",
+    "Running code you do not understand.",
+    "Skipping tests."
+   ],
+   "checks": [
+    {
+     "question": "What should you include when asking for debugging help?",
+     "options": [
+      "The error message and relevant code",
+      "Only 'it fails'",
+      "Your password",
+      "The whole repository always"
+     ],
+     "correct_index": 0,
+     "explanation": "Error details and relevant code are the key inputs."
+    },
+    {
+     "question": "What should you do with generated code?",
+     "options": [
+      "Deploy immediately",
+      "Review and test it",
+      "Ignore security",
+      "Delete tests"
+     ],
+     "correct_index": 1,
+     "explanation": "Review and tests protect quality."
+    }
+   ]
+  },
+  {
+   "number": 16,
+   "title": "Responsible AI and data privacy",
+   "summary": "Protecting data, checking outputs and using AI tools appropriately.",
+   "objective": "Apply privacy, verification and fairness practices when using AI tools.",
+   "explanation": "Do not enter confidential, personal, customer, financial, medical or company-sensitive information unless your organisation has approved the AI tool and the data-handling process. Replace real names and numbers with placeholders when possible.\n\nAI can state false things confidently (hallucination), reflect bias and be manipulated by malicious text inside documents (prompt injection). Verify important facts, ask for sources and assumptions, keep a human responsible for decisions and follow your organisation's policy. PromptCraft Hub keeps data on your computer and sends nothing to external services.",
+   "good_example": "Use [CUSTOMER NAME] and [ORDER ID] instead of real details. Ask: list your assumptions and tell me which statements I should verify before sharing.",
+   "weak_example": "Here is our customer list with phone numbers; clean it up.",
+   "tips": [
+    "Anonymise before pasting.",
+    "Check policy for the specific tool.",
+    "Verify facts and keep a human in the loop."
+   ],
+   "common_mistakes": [
+    "Pasting customer or personal data.",
+    "Treating AI output as verified fact.",
+    "Following instructions embedded in untrusted documents."
+   ],
+   "checks": [
+    {
+     "question": "Which action is appropriate?",
+     "options": [
+      "Paste customer data into any tool",
+      "Use placeholders and approved tools",
+      "Share passwords",
+      "Ignore policy"
+     ],
+     "correct_index": 1,
+     "explanation": "Placeholders and approved tools reduce risk."
+    },
+    {
+     "question": "What is a hallucination?",
+     "options": [
+      "A confident but false statement by the AI",
+      "A fast answer",
+      "A formatting option",
+      "A saved prompt"
+     ],
+     "correct_index": 0,
+     "explanation": "Hallucinations are plausible but incorrect outputs."
+    }
+   ]
+  }
+ ]
+}

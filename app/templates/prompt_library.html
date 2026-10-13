@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Prompt Library{% endblock %}
+{% block heading %}Prompt Library{% endblock %}
+{% block subheading %}<p>Ready-to-use prompts with explanations. Search, filter and open any prompt to customise it.</p>{% endblock %}
+{% block head_actions %}<button type="button" class="btn btn-secondary filter-toggle" id="filter-toggle" aria-controls="filters" aria-expanded="false">{{ icon('filter') }} Filters</button>{% endblock %}
+{% block content %}
+<div class="library">
+  <aside class="filters card is-closed-mobile" id="filters" aria-label="Filters">
+    <form id="filter-form" action="/prompts" method="get" autocomplete="off">
+      <div class="field"><label for="q">Keyword search</label><input class="input" id="q" name="q" type="search" value="{{ q }}" maxlength="100" placeholder="Search title, description, tags..." list="q-suggestions"><datalist id="q-suggestions"></datalist></div>
+      <div class="field"><label for="f-category">Category</label>
+        <select class="select" id="f-category" name="category"><option value="">All categories</option>{% for c in facets.categories %}<option value="{{ c.slug }}" {{ 'selected' if filters.category == c.slug }}>{{ c.name }} ({{ c.count }})</option>{% endfor %}</select></div>
+      <div class="field"><label for="f-sub">Subcategory</label>
+        <select class="select" id="f-sub" name="subcategory"><option value="">All subcategories</option>{% for s in facets.subcategories %}<option value="{{ s.name }}" data-category="{{ s.category_slug }}" {{ 'selected' if filters.subcategory|lower == s.name|lower }}>{{ s.name }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="f-tool">AI tool</label>
+        <select class="select" id="f-tool" name="ai_tool"><option value="">Any tool</option>{% for t in facets.ai_tools %}<option {{ 'selected' if filters.ai_tool == t }}>{{ t }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="f-diff">Difficulty</label>
+        <select class="select" id="f-diff" name="difficulty"><option value="">Any level</option>{% for d in facets.difficulties %}<option {{ 'selected' if filters.difficulty == d }}>{{ d }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="f-role">User role</label>
+        <select class="select" id="f-role" name="role"><option value="">Any role</option>{% for r in facets.roles %}<option {{ 'selected' if filters.role|lower == r|lower }}>{{ r }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="f-tag">Tag</label><input class="input" id="f-tag" name="tag" value="{{ filters.tag }}" maxlength="60" placeholder="e.g. sql" list="tag-list">
+        <datalist id="tag-list">{% for t in facets.tags %}<option value="{{ t.name }}">{% endfor %}</datalist></div>
+      <div class="field check"><input type="checkbox" id="f-feat" name="featured" value="true" {{ 'checked' if filters.featured }}><label for="f-feat" style="margin:0">Featured only</label></div>
+      <div class="field"><label for="f-sort">Sort by</label>
+        <select class="select" id="f-sort" name="sort">
+          {% for v, l in [('relevance', 'Best match'), ('newest', 'Newest'), ('viewed', 'Most viewed'), ('copied', 'Most copied'), ('alpha', 'Alphabetical (A-Z)')] %}<option value="{{ v }}" {{ 'selected' if filters.sort == v }}>{{ l }}</option>{% endfor %}</select></div>
+      <input type="hidden" name="view" value="{{ view }}" id="f-view">
+      <div class="row"><button class="btn btn-primary" type="submit">Apply</button><a class="btn btn-secondary" href="/prompts" id="clear-filters">Clear all filters</a></div>
+    </form>
+    <hr>
+    <h3 class="small muted" style="text-transform:uppercase;letter-spacing:.04em">Popular tags</h3>
+    <div class="tag-cloud">{% for t in facets.tags[:14] %}<a class="tag" href="/prompts?tag={{ t.name|urlencode }}">#{{ t.name }}</a>{% endfor %}</div>
+  </aside>
+  <section aria-label="Results">
+    <div class="toolbar">
+      <p class="muted" style="margin:0" id="result-count" role="status" aria-live="polite">{% include "partials/result_count.html" %}</p>
+      <div class="seg" role="group" aria-label="Layout">
+        <button type="button" data-view="grid" aria-pressed="{{ 'true' if view == 'grid' else 'false' }}">{{ icon('grid') }} Grid</button>
+        <button type="button" data-view="list" aria-pressed="{{ 'true' if view == 'list' else 'false' }}">{{ icon('list') }} List</button>
+      </div>
+    </div>
+    <div id="results" data-base="/prompts">{% include "partials/prompt_results.html" %}</div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/library.js"></script>{% endblock %}

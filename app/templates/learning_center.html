@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Learning Center{% endblock %}
+{% block heading %}Learning Center{% endblock %}
+{% block subheading %}<p>Sixteen short lessons on writing effective prompts, each with examples, tips and a quick knowledge check. Your progress is saved locally.</p>{% endblock %}
+{% block content %}
+<section class="card" aria-labelledby="prog-h">
+  <div class="card-head"><h2 id="prog-h">Your progress</h2><strong>{{ progress.completed }} / {{ progress.total }} completed</strong></div>
+  <div class="progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="Learning progress"><span style="width: {{ progress.percent }}%"></span></div>
+</section>
+<section class="section" aria-label="Lessons"><div class="grid grid-3" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+  {% for m in modules %}
+  <a class="card lesson-card {{ 'is-done' if m.completed }}" href="/learning/{{ m.slug }}">
+    <div class="row between"><span class="lesson-num">{{ m.number }}</span>{% if m.completed %}<span class="badge badge-present">{{ icon('check-circle') }} Completed</span>{% else %}<span class="badge">Not started</span>{% endif %}</div>
+    <h3 style="margin:.4rem 0 0">{{ m.title }}</h3><p class="muted" style="margin:0">{{ m.summary }}</p>
+  </a>
+  {% endfor %}
+</div></section>
+<section class="section card" id="glossary" aria-labelledby="gl-h">
+  <div class="card-head"><h2 id="gl-h">Glossary</h2><div class="field" style="margin:0;min-width:240px"><label class="sr-only" for="gloss-filter">Filter glossary</label><input class="input" id="gloss-filter" type="search" placeholder="Filter terms..." maxlength="60"></div></div>
+  <dl class="gloss" id="gloss-list">{% for t in glossary %}<div data-term="{{ t.term|lower }} {{ t.definition|lower }}"><dt>{{ t.term }}</dt><dd>{{ t.definition }}{% if t.example %} <em class="faint">Example: {{ t.example }}</em>{% endif %}</dd></div>{% endfor %}</dl>
+  <p class="muted" id="gloss-empty" hidden>No glossary terms match your filter.</p>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/learning.js"></script>{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon, prompt_card %}
+{% block title %}Favorites{% endblock %}
+{% block heading %}Favorites{% endblock %}
+{% block subheading %}<p>Prompts you have marked with a heart. Search, filter, open, copy or export them.</p>{% endblock %}
+{% block content %}
+<form class="card row" action="/favorites" method="get" role="search" style="align-items:flex-end;margin-bottom:1rem">
+  <div class="field grow" style="margin:0;min-width:200px"><label for="fq">Search favorites</label><input class="input" id="fq" name="q" type="search" value="{{ q }}" maxlength="100" placeholder="Search your favorites..."></div>
+  <div class="field" style="margin:0"><label for="fc">Category</label><select class="select" id="fc" name="category"><option value="">All</option>{% for c in facets.categories %}<option value="{{ c.slug }}" {{ 'selected' if filters.category == c.slug }}>{{ c.name }}</option>{% endfor %}</select></div>
+  <div class="field" style="margin:0"><label for="fd">Difficulty</label><select class="select" id="fd" name="difficulty"><option value="">Any</option>{% for d in facets.difficulties %}<option {{ 'selected' if filters.difficulty == d }}>{{ d }}</option>{% endfor %}</select></div>
+  <button class="btn btn-primary" type="submit">Filter</button>{% if has_filters %}<a class="btn btn-secondary" href="/favorites">Clear</a>{% endif %}
+</form>
+<p class="muted" role="status"><strong>{{ total }}</strong> favorite{{ '' if total == 1 else 's' }}{% if q %} matching &ldquo;{{ q }}&rdquo;{% endif %}</p>
+{% if error %}<div class="alert alert-danger" role="alert">{{ icon('alert') }}<div>{{ error }}</div></div>{% endif %}
+{% if items %}
+<div class="prompt-grid" id="prompt-collection" data-remove-on-unfavorite="true">{% for p in items %}
+  <div data-fav-wrap>{{ prompt_card(p, q) }}
+    <div class="row no-print" style="margin-top:.4rem"><a class="btn btn-ghost btn-sm" href="/api/prompts/{{ p.id }}/export?format=txt" download>{{ icon('download') }} TXT</a><a class="btn btn-ghost btn-sm" href="/api/prompts/{{ p.id }}/export?format=md" download>MD</a><a class="btn btn-ghost btn-sm" href="/api/prompts/{{ p.id }}/export?format=json" download>JSON</a></div></div>{% endfor %}</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty" id="fav-empty">{{ icon('heart') }}<h3>{{ 'No favorites match your filters' if has_filters else 'You have no favorites yet' }}</h3><p>{{ 'Try clearing the filters.' if has_filters else 'Select the heart on a prompt card or detail page to save it here.' }}</p><a class="btn btn-primary" href="/prompts">Browse the Prompt Library</a></div>
+{% endif %}
+{% endblock %}

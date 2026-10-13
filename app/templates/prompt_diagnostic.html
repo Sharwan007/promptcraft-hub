@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Prompt Diagnostic{% endblock %}
+{% block heading %}Prompt Diagnostic{% endblock %}
+{% block subheading %}<p>Paste a prompt to see which components are present, partly present, missing or need clarification, with specific recommendations. The score is transparent and rule-based.</p>{% endblock %}
+{% block content %}
+{% include "partials/privacy_warning.html" %}
+<section class="card" aria-labelledby="d-in">
+  <h2 id="d-in">Prompt to diagnose</h2>
+  <form id="diag-form" novalidate>
+    <div class="field"><label for="prompt">Prompt</label><textarea class="textarea textarea-lg" id="prompt" name="prompt" maxlength="20000" placeholder="e.g. Create a presentation." required></textarea><div class="error-text" id="prompt-error" role="alert" hidden></div></div>
+    <div class="field" style="max-width:360px"><label for="use-case">Intended use case (optional)</label><select class="select" id="use-case"><option value="">Detect automatically</option>{% for u in use_cases %}<option value="{{ u.key }}">{{ u.label }}</option>{% endfor %}</select></div>
+    <div class="row"><button class="btn btn-primary btn-lg" type="submit" id="diag-btn">{{ icon('stethoscope') }} Diagnose</button><button class="btn btn-secondary" type="button" id="sample-btn">{{ icon('file') }} Load sample</button><button class="btn btn-ghost" type="button" id="clear-btn">{{ icon('x') }} Clear</button></div>
+  </form>
+</section>
+
+<section id="result" class="section" hidden aria-live="polite" aria-labelledby="d-res">
+  <h2 id="d-res">Diagnosis</h2>
+  <div class="diag-top" id="top-grid">
+    <div class="card center"><div id="ring" style="display:flex;justify-content:center"></div><h3 id="label" style="margin-top:.75rem"></h3><p class="small muted" id="score-note"></p>
+      <div id="adjustments"></div></div>
+    <div class="card"><h3>Score breakdown</h3><div id="breakdown"></div></div>
+  </div>
+  <div class="card section"><h3>Components</h3><div id="components"></div></div>
+  <div class="card section"><h3>Risk and clarity checks</h3><div id="risks"></div></div>
+  <div class="grid grid-2 section" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+    <div class="card"><h3>{{ icon('check-circle') }} Strengths</h3><ul id="strengths"></ul></div>
+    <div class="card"><h3>{{ icon('target') }} Recommendations</h3><ol id="recs"></ol></div>
+  </div>
+  <div class="row no-print section">
+    <button type="button" class="btn btn-secondary" id="copy-recs">{{ icon('copy') }} Copy recommendations</button>
+    <button type="button" class="btn btn-primary" id="to-improver">{{ icon('sparkles') }} Improve this prompt</button>
+    <div class="dropdown"><button type="button" class="btn btn-secondary" data-dropdown aria-haspopup="true" aria-expanded="false">{{ icon('download') }} Download diagnosis {{ icon('chevron-down') }}</button>
+      <div class="dropdown-menu" hidden><button type="button" data-download="txt">Text (.txt)</button><button type="button" data-download="json">JSON (.json)</button></div></div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/diagnostic.js"></script>{% endblock %}

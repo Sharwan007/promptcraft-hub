@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Manage content{% endblock %}
+{% block heading %}Manage content{% endblock %}
+{% block subheading %}<p>Categories, subcategories, tags, learning lessons, glossary terms and Before &amp; After examples.</p>{% endblock %}
+{% block head_actions %}<a class="btn btn-secondary" href="/admin">{{ icon('arrow-left') }} Back to administration</a><button type="button" class="btn btn-primary" id="add-btn">{{ icon('plus') }} Add new</button>{% endblock %}
+{% block content %}
+<div class="tabs" role="tablist" aria-label="Content types" id="content-tabs"></div>
+<div id="manager" aria-live="polite"></div>
+<dialog class="modal modal-wide" id="res-dialog" aria-labelledby="res-title"><form id="res-form" novalidate>
+  <div class="modal-head"><h2 id="res-title">Edit</h2><button type="button" class="btn-icon" data-close aria-label="Close">{{ icon('x') }}</button></div>
+  <div class="modal-body" id="res-fields"><div class="alert alert-danger" id="res-errors" role="alert" hidden></div></div>
+  <div class="modal-foot"><button type="button" class="btn btn-secondary" data-close>Cancel</button><button type="submit" class="btn btn-primary">{{ icon('save') }} Save</button></div></form></dialog>
+{% endblock %}
+{% block scripts %}<script src="/static/js/admin_content.js"></script>{% endblock %}

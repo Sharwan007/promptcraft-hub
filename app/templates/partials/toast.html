@@ -1,0 +1,18 @@
+{% from "partials/macros.html" import icon %}
+<div class="toast-stack" id="toast-stack" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<dialog class="modal" id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+  <form method="dialog">
+    <div class="modal-head"><h2 id="confirm-title">Please confirm</h2><button class="btn-icon" value="cancel" aria-label="Close">{{ icon('x') }}</button></div>
+    <div class="modal-body"><p id="confirm-message"></p></div>
+    <div class="modal-foot"><button class="btn btn-secondary" value="cancel">Cancel</button><button class="btn btn-danger" value="ok" id="confirm-ok">Confirm</button></div>
+  </form>
+</dialog>
+
+<dialog class="modal" id="ask-dialog" aria-labelledby="ask-title">
+  <form method="dialog" id="ask-form">
+    <div class="modal-head"><h2 id="ask-title">Enter a value</h2><button class="btn-icon" value="cancel" aria-label="Close">{{ icon('x') }}</button></div>
+    <div class="modal-body"><div class="field"><label for="ask-input" id="ask-label">Value</label><input class="input" id="ask-input" maxlength="200"><div class="error-text" id="ask-error" role="alert" hidden></div></div></div>
+    <div class="modal-foot"><button class="btn btn-secondary" value="cancel">Cancel</button><button class="btn btn-primary" value="ok" id="ask-ok">Save</button></div>
+  </form>
+</dialog>

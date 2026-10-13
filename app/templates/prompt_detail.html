@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon, score_ring, difficulty_badge, prompt_card %}
+{% block title %}{{ p.title }}{% endblock %}
+{% block page_head %}
+<div class="page-head">
+  <div>
+    <div class="row" style="margin-bottom:.5rem">
+      <a class="badge badge-cat" href="/prompts?category={{ p.category_slug }}">{{ p.category }}</a>
+      {% if p.subcategory %}<span class="badge">{{ p.subcategory }}</span>{% endif %}
+      {{ difficulty_badge(p.difficulty) }}
+      {% for t in p.ai_tools %}<span class="badge badge-tool">{{ t }}</span>{% endfor %}
+      {% if p.featured %}<span class="badge badge-featured">{{ icon('star') }} Featured</span>{% endif %}
+      {% if not p.published %}<span class="badge badge-draft">Unpublished</span>{% endif %}{% if p.archived %}<span class="badge badge-draft">Archived</span>{% endif %}
+    </div>
+    <h1>{{ p.title }}</h1>
+    <p>{{ p.description }}</p>
+  </div>
+  <div class="row no-print">
+    <button type="button" class="btn btn-primary" data-copy-prompt="{{ p.full_prompt }}" data-prompt-id="{{ p.id }}">{{ icon('copy') }} Copy prompt</button>
+    <button type="button" class="btn btn-secondary btn-icon-text {{ 'is-on' if p.is_favorite }}" data-favorite="{{ p.id }}" aria-pressed="{{ 'true' if p.is_favorite else 'false' }}" aria-label="{{ 'Remove from favorites' if p.is_favorite else 'Add to favorites' }}">{{ icon('heart') }} <span data-fav-label>{{ 'Favorited' if p.is_favorite else 'Favorite' }}</span></button>
+    <button type="button" class="btn btn-secondary" id="duplicate-btn" data-prompt-id="{{ p.id }}">{{ icon('folder') }} Duplicate and customize</button>
+    <div class="dropdown">
+      <button type="button" class="btn btn-secondary" aria-haspopup="true" aria-expanded="false" data-dropdown>{{ icon('download') }} Export {{ icon('chevron-down') }}</button>
+      <div class="dropdown-menu" hidden>
+        <a href="/api/prompts/{{ p.id }}/export?format=txt" download>Text (.txt)</a>
+        <a href="/api/prompts/{{ p.id }}/export?format=md" download>Markdown (.md)</a>
+        <a href="/api/prompts/{{ p.id }}/export?format=json" download>JSON (.json)</a>
+      </div>
+    </div>
+    <a class="btn btn-secondary" href="/prompts/{{ p.slug }}/print" target="_blank" rel="noopener">{{ icon('printer') }} Printable view</a>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<script type="application/json" id="prompt-data">{{ {"id": p.id, "title": p.title, "full_prompt": p.full_prompt, "placeholders": p.required_inputs, "examples": p.example_inputs, "category_id": p.category_id, "description": p.description, "tags": p.tags}|tojson }}</script>
+<div class="detail">
+  <div class="stack">
+    <section class="card" aria-labelledby="full-h">
+      <div class="card-head"><h2 id="full-h">Full prompt</h2><span class="small muted">Highlighted [PLACEHOLDERS] are for you to replace.</span></div>
+      <pre class="prompt-box tall" id="prompt-original">{{ p.full_prompt|placeholders }}</pre>
+    </section>
+
+    {% if p.components_list %}
+    <section aria-labelledby="struct-h">
+      <h2 id="struct-h">How the prompt is built</h2>
+      <p class="muted">Every strong prompt separates these parts. The Prompt Builder uses the same blueprint.</p>
+      {% for c in p.components_list %}<div class="component" data-key="{{ c.key }}"><h4>{{ c.label }}</h4><div class="txt">{{ c.text|placeholders }}</div></div>{% endfor %}
+    </section>
+    {% endif %}
+
+    <section class="card" aria-labelledby="custom-h" id="customize">
+      <div class="card-head"><h2 id="custom-h">Customize this prompt</h2></div>
+      {% if p.required_inputs %}
+      <p class="muted">Fill in the values below. The customized prompt updates immediately; empty fields keep their [PLACEHOLDER].</p>
+      <form id="custom-form" class="custom-form" autocomplete="off">
+        <div class="form-row">
+          {% for name in p.required_inputs %}
+          <div class="field"><label for="ph-{{ loop.index }}">{{ name|title }}</label>
+            <textarea class="textarea" style="min-height:64px" id="ph-{{ loop.index }}" data-ph="{{ name }}" rows="2" maxlength="1500" placeholder="{{ p.example_inputs.get(name, '') }}"></textarea></div>
+          {% endfor %}
+        </div>
+      </form>
+      {% else %}<p class="muted">This prompt has no placeholders. You can still edit it below.</p>{% endif %}
+      <h3 class="small muted" style="text-transform:uppercase;letter-spacing:.04em">Customized preview</h3>
+      <pre class="prompt-box" id="prompt-preview" aria-live="polite">{{ p.full_prompt|placeholders }}</pre>
+      {% include "partials/privacy_warning.html" %}
+      <div class="row no-print">
+        <button type="button" class="btn btn-primary" id="copy-custom">{{ icon('copy') }} Copy customized prompt</button>
+        <button type="button" class="btn btn-secondary" id="save-custom">{{ icon('save') }} Save to My Prompts</button>
+        <div class="dropdown"><button type="button" class="btn btn-secondary" aria-haspopup="true" aria-expanded="false" data-dropdown>{{ icon('download') }} Export {{ icon('chevron-down') }}</button>
+          <div class="dropdown-menu" hidden><button type="button" data-export-custom="txt">Text (.txt)</button><button type="button" data-export-custom="md">Markdown (.md)</button><button type="button" data-export-custom="json">JSON (.json)</button></div></div>
+        <button type="button" class="btn btn-ghost" id="reset-custom">{{ icon('undo') }} Reset</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="why-h">
+      <h2 id="why-h">Why this prompt works</h2>
+      <p>{{ p.why_it_works }}</p>
+      {% if p.expected_output %}<h3>Expected output</h3><p>{{ p.expected_output }}</p>{% endif %}
+      {% if p.example_output %}<h3>What a result looks like</h3><p>{{ p.example_output }}</p>{% endif %}
+    </section>
+
+    <div class="grid grid-2" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <section class="card" aria-labelledby="tips-h"><h2 id="tips-h">{{ icon('lightbulb') }} Customization guidance</h2><ul>{% for t in p.customization_tips %}<li>{{ t }}</li>{% endfor %}</ul></section>
+      <section class="card" aria-labelledby="mist-h"><h2 id="mist-h">{{ icon('alert') }} Common mistakes</h2><ul>{% for t in p.common_mistakes %}<li>{{ t }}</li>{% endfor %}</ul></section>
+    </div>
+
+    {% if p.required_inputs %}
+    <section aria-labelledby="inputs-h"><h2 id="inputs-h">Required inputs and example values</h2>
+      <div class="table-wrap"><table><thead><tr><th scope="col">Placeholder</th><th scope="col">Example value</th></tr></thead>
+        <tbody>{% for name in p.required_inputs %}<tr><td><span class="ph">[{{ name }}]</span></td><td>{{ p.example_inputs.get(name, '') }}</td></tr>{% endfor %}</tbody></table></div>
+    </section>
+    {% endif %}
+  </div>
+
+  <aside class="side-sticky stack" aria-label="Prompt details">
+    <section class="card">
+      <h2>Details</h2>
+      <dl class="kv" style="margin:0">
+        <dt>Category</dt><dd>{{ p.category }}{% if p.subcategory %} / {{ p.subcategory }}{% endif %}</dd>
+        <dt>User role</dt><dd>{{ p.user_role or 'Any' }}</dd>
+        <dt>Use case</dt><dd>{{ p.use_case or '-' }}</dd>
+        <dt>Version</dt><dd>v{{ p.version }} &middot; updated {{ p.updated_at|fmt_date }}</dd>
+        <dt>Usage</dt><dd>{{ p.view_count }} views &middot; {{ p.copy_count }} copies</dd>
+        <dt>Tags</dt><dd><div class="chips">{% for t in p.tags %}<a class="tag" href="/prompts?tag={{ t|urlencode }}">#{{ t }}</a>{% endfor %}</div></dd>
+        <dt>Local shareable URL</dt><dd><div class="row"><input class="input" readonly value="{{ share_url }}" id="share-url" aria-label="Local shareable URL" style="font-size:.8rem"><button type="button" class="btn btn-secondary btn-sm" data-copy-text-from="#share-url">{{ icon('link') }} Copy</button></div>
+          <span class="help">Works on this computer while the app is running.</span></dd>
+      </dl>
+    </section>
+    <section class="card">
+      <h2>Quality score</h2>
+      <div class="row">{{ score_ring(score.score, score.label, 'sm') }}<div><strong>{{ score.label }}</strong><br><span class="small muted">Rule-based score, not AI.</span></div></div>
+      <details class="disclosure" style="margin-top:.8rem"><summary>Score breakdown</summary><div>
+        {% for b in score.breakdown %}<div class="bar-row"><span>{{ b.label }}</span><div class="progress" aria-hidden="true"><span style="width: {{ (100 * b.points / b.max)|round|int }}%"></span></div><span class="pts">{{ b.points }}/{{ b.max }}</span></div>{% endfor %}
+      </div></details>
+      <a class="btn btn-secondary btn-sm" href="/diagnostic" data-send-diagnostic>{{ icon('stethoscope') }} Diagnose in detail</a>
+    </section>
+    {% if related %}
+    <section class="card"><h2>Related prompts</h2>
+      <ul style="list-style:none;padding:0;margin:0">{% for r in related %}<li style="padding:.45rem 0;border-bottom:1px solid var(--border)"><a href="/prompts/{{ r.slug }}"><strong>{{ r.title }}</strong></a><br><span class="small muted">{{ r.category }} &middot; {{ r.difficulty }}</span></li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/prompt_detail.js"></script>{% endblock %}

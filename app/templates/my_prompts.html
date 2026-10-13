@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}My Prompts{% endblock %}
+{% block heading %}My Prompts{% endblock %}
+{% block subheading %}<p>Your own prompts and customised copies of library prompts. Edits create versions you can restore. Everything is stored on this computer.</p>{% endblock %}
+{% block head_actions %}
+<button type="button" class="btn btn-primary" id="new-prompt">{{ icon('plus') }} New prompt</button>
+<div class="dropdown"><button type="button" class="btn btn-secondary" data-dropdown aria-haspopup="true" aria-expanded="false">{{ icon('download') }} Export all {{ icon('chevron-down') }}</button>
+  <div class="dropdown-menu" hidden><a href="/api/custom-prompts/export?format=txt{{ '&archived=true' if archived }}" download>Text (.txt)</a><a href="/api/custom-prompts/export?format=md{{ '&archived=true' if archived }}" download>Markdown (.md)</a><a href="/api/custom-prompts/export?format=json{{ '&archived=true' if archived }}" download>JSON (.json)</a></div></div>
+{% endblock %}
+{% block content %}
+<script type="application/json" id="custom-data">{{ items|tojson }}</script>
+<div class="tabs" role="tablist" aria-label="Active or archived prompts">
+  <a class="tab {{ 'is-active' if not archived }}" role="tab" aria-selected="{{ 'true' if not archived else 'false' }}" href="/my-prompts">Active ({{ counts.active }})</a>
+  <a class="tab {{ 'is-active' if archived }}" role="tab" aria-selected="{{ 'true' if archived else 'false' }}" href="/my-prompts?archived=true">Archived ({{ counts.archived }})</a>
+</div>
+<form class="card row" action="/my-prompts" method="get" role="search" style="align-items:flex-end;margin-bottom:1rem">
+  <input type="hidden" name="archived" value="{{ 'true' if archived else '' }}">
+  <div class="field grow" style="margin:0;min-width:200px"><label for="mq">Search my prompts</label><input class="input" id="mq" name="q" type="search" value="{{ q }}" maxlength="100"></div>
+  <div class="field" style="margin:0"><label for="mc">Category</label><select class="select" id="mc" name="category_id"><option value="">All categories</option>{% for c in categories %}<option value="{{ c.id }}" {{ 'selected' if category_id == c.id }}>{{ c.name }}</option>{% endfor %}</select></div>
+  <button class="btn btn-primary" type="submit">Search</button>{% if q or category_id %}<a class="btn btn-secondary" href="/my-prompts{{ '?archived=true' if archived }}">Clear</a>{% endif %}
+</form>
+{% if items %}
+<div class="prompt-grid">
+  {% for c in items %}
+  <article class="prompt-card" data-custom-id="{{ c.id }}">
+    <div class="meta">{% if c.category %}<span class="badge badge-cat">{{ c.category }}</span>{% endif %}<span class="badge">v{{ c.version }}</span>{% if c.source_prompt_id %}<span class="badge badge-tool">From library</span>{% endif %}{% if c.archived %}<span class="badge badge-draft">Archived</span>{% endif %}</div>
+    <h3>{{ c.title|highlight(q) }}</h3>
+    <p class="desc">{{ (c.description or c.content)[:170] }}{{ '...' if (c.description or c.content)|length > 170 }}</p>
+    <div class="chips">{% for t in c.tags %}<span class="tag">#{{ t }}</span>{% endfor %}</div>
+    <p class="small faint" style="margin:0">Updated {{ c.updated_at|fmt_date }}</p>
+    <div class="actions">
+      <button type="button" class="btn btn-secondary btn-sm" data-act="copy">{{ icon('copy') }} Copy</button>
+      {% if not c.archived %}
+      <button type="button" class="btn btn-primary btn-sm" data-act="edit">{{ icon('edit') }} Edit</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-act="versions">{{ icon('history') }} Versions</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-act="archive">{{ icon('archive') }} Archive</button>
+      {% else %}
+      <button type="button" class="btn btn-primary btn-sm" data-act="restore">{{ icon('undo') }} Restore</button>
+      <button type="button" class="btn btn-danger btn-sm" data-act="delete">{{ icon('trash') }} Delete permanently</button>
+      {% endif %}
+      <div class="dropdown"><button type="button" class="btn btn-ghost btn-sm" data-dropdown aria-haspopup="true" aria-expanded="false" aria-label="Export {{ c.title }}">{{ icon('download') }}</button>
+        <div class="dropdown-menu" hidden><a href="/api/custom-prompts/{{ c.id }}/export?format=txt" download>Text</a><a href="/api/custom-prompts/{{ c.id }}/export?format=md" download>Markdown</a><a href="/api/custom-prompts/{{ c.id }}/export?format=json" download>JSON</a></div></div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty">{{ icon('folder') }}<h3>{{ 'No archived prompts' if archived else ('No prompts match your search' if q or category_id else 'You have not saved any prompts yet') }}</h3>
+  <p>{{ 'Archived prompts stay here until you restore or permanently delete them.' if archived else 'Create a prompt, duplicate one from the library, or save the output of the Builder or Improver.' }}</p>
+  {% if not archived %}<div class="row" style="justify-content:center"><button type="button" class="btn btn-primary" id="new-prompt-2">{{ icon('plus') }} New prompt</button><a class="btn btn-secondary" href="/prompts">Browse the library</a></div>{% endif %}</div>
+{% endif %}
+
+<dialog class="modal modal-wide" id="edit-dialog" aria-labelledby="edit-title">
+  <form id="edit-form" novalidate>
+    <div class="modal-head"><h2 id="edit-title">New prompt</h2><button type="button" class="btn-icon" data-close aria-label="Close">{{ icon('x') }}</button></div>
+    <div class="modal-body">
+      <div class="field"><label for="e-title">Title</label><input class="input" id="e-title" maxlength="200" required><div class="error-text" data-err="title" role="alert" hidden></div></div>
+      <div class="field"><label for="e-desc">Description (optional)</label><input class="input" id="e-desc" maxlength="1000"></div>
+      <div class="form-row">
+        <div class="field"><label for="e-cat">Category</label><select class="select" id="e-cat"><option value="">No category</option>{% for c in categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="e-tags">Personal tags (comma separated)</label><input class="input" id="e-tags" maxlength="300" placeholder="weekly, stakeholder"></div>
+      </div>
+      <div class="field"><label for="e-content">Prompt</label><textarea class="textarea textarea-lg mono" id="e-content" maxlength="20000" required></textarea><div class="error-text" data-err="content" role="alert" hidden></div></div>
+      <div class="field" id="note-wrap" hidden><label for="e-note">What changed? (optional)</label><input class="input" id="e-note" maxlength="200"></div>
+      {% include "partials/privacy_warning.html" %}
+    </div>
+    <div class="modal-foot"><button type="button" class="btn btn-secondary" data-close>Cancel</button><button type="submit" class="btn btn-primary" id="e-save">{{ icon('save') }} Save</button></div>
+  </form>
+</dialog>
+<dialog class="modal modal-wide" id="versions-dialog" aria-labelledby="ver-title">
+  <div class="modal-head"><h2 id="ver-title">Version history</h2><button type="button" class="btn-icon" data-close aria-label="Close">{{ icon('x') }}</button></div>
+  <div class="modal-body" id="versions-body"></div>
+  <div class="modal-foot"><button type="button" class="btn btn-secondary" data-close>Close</button></div>
+</dialog>
+{% endblock %}
+{% block scripts %}<script src="/static/js/my_prompts.js"></script>{% endblock %}

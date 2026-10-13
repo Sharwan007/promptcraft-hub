@@ -1,0 +1,51 @@
+{% from "partials/macros.html" import icon %}
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}{{ app_name }}{% endblock %} | PromptCraft Hub</title>
+  <link rel="icon" type="image/svg+xml" href="/static/icons/favicon.svg">
+  <script src="/static/js/theme-init.js"></script>
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/pages.css">
+  <link rel="stylesheet" href="/static/css/dark-mode.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="app" id="app">
+    {% include "partials/sidebar.html" %}
+    <div class="drawer-overlay" data-drawer-close></div>
+    <div class="main-col">
+      {% include "partials/header.html" %}
+      <main id="main" class="page" tabindex="-1">
+        {% include "partials/breadcrumbs.html" %}
+        {% block page_head %}
+        <div class="page-head">
+          <div><h1>{% block heading %}{{ app_name }}{% endblock %}</h1>{% block subheading %}{% endblock %}</div>
+          <div class="row no-print">{% block head_actions %}{% endblock %}</div>
+        </div>
+        {% endblock %}
+        <noscript><div class="alert alert-warning">{{ icon('alert') }}<div>JavaScript is turned off. Browsing and searching still work, but copy buttons, favorites and the interactive tools need JavaScript.</div></div></noscript>
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="footer">
+        <span>PromptCraft Hub v{{ app_version }} &middot; Build better prompts. Get better results.</span>
+        <span><a href="/privacy">Privacy</a> &middot; <a href="/help">Help</a> &middot; <a href="/docs">API docs</a> &middot; Works offline</span>
+      </footer>
+    </div>
+  </div>
+  {% include "partials/toast.html" %}
+  <script src="/static/js/utilities.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/favorites.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

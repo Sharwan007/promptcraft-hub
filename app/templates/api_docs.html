@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}API documentation{% endblock %}
+{% block heading %}API documentation{% endblock %}
+{% block subheading %}<p>Offline API reference generated from <a href="/openapi.json">/openapi.json</a>. Try read-only endpoints directly; administrator endpoints need a signed-in browser session.</p>{% endblock %}
+{% block content %}
+<div class="row" style="margin-bottom:1rem"><div class="field grow" style="margin:0"><label class="sr-only" for="api-filter">Filter endpoints</label><input class="input" id="api-filter" type="search" placeholder="Filter endpoints, e.g. prompts or favorites..." maxlength="60"></div></div>
+<div id="api-list" aria-live="polite"><p class="muted"><span class="spinner"></span> Loading endpoints...</p></div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/api_docs.js"></script>{% endblock %}

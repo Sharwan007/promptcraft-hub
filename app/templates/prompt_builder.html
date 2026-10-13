@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}Prompt Builder{% endblock %}
+{% block heading %}Prompt Builder{% endblock %}
+{% block subheading %}<p>Build a structured prompt with the <strong>Prompt Blueprint</strong>: Role, Context, Task, Input, Output format, Constraints and Quality criteria.</p>{% endblock %}
+{% block head_actions %}
+<button type="button" class="btn btn-secondary" id="load-sample">{{ icon('file') }} Load sample</button>
+<button type="button" class="btn btn-secondary" id="resume-draft">{{ icon('history') }} Resume draft</button>
+<button type="button" class="btn btn-secondary" id="reset-builder">{{ icon('undo') }} Reset</button>
+{% endblock %}
+{% block content %}
+<script type="application/json" id="catalog-data">{{ catalog|tojson }}</script>
+{% include "partials/privacy_warning.html" %}
+<div class="builder">
+  <section class="card" aria-labelledby="wiz-h">
+    <h2 class="sr-only" id="wiz-h">Prompt Blueprint wizard</h2>
+    <ol class="stepper" id="stepper" aria-label="Steps">
+      {% for n, label in [(1,'Purpose'),(2,'Role'),(3,'Context'),(4,'Task'),(5,'Inputs'),(6,'Output format'),(7,'Constraints'),(8,'Quality'),(9,'Review')] %}
+      <li><button type="button" data-step="{{ n }}"><span class="n">{{ n }}</span>{{ label }}</button></li>
+      {% endfor %}
+    </ol>
+    <form id="builder-form" autocomplete="off">
+      <div class="step" data-step="1">
+        <h3>1. Choose the purpose</h3><p class="muted">What do you want the AI to do?</p>
+        <div class="choice-grid" role="radiogroup" aria-label="Purpose">
+          {% for pu in catalog.purposes %}<div class="choice"><input type="radio" name="purpose" id="pu-{{ pu.key }}" value="{{ pu.key }}"><label for="pu-{{ pu.key }}">{{ pu.label }}</label></div>{% endfor %}
+        </div>
+        <div class="error-text" data-error="1" role="alert" hidden></div>
+      </div>
+      <div class="step" data-step="2" hidden>
+        <h3>2. Select or define the role</h3><p class="muted">Pick a suggestion or type your own. The role sets the expertise and vocabulary.</p>
+        <div class="field"><label for="role-select">Suggested roles</label><select class="select" id="role-select"><option value="">Choose a suggested role...</option>{% for r in roles %}<option>{{ r }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="role">Role</label><input class="input" id="role" name="role" maxlength="300" placeholder="e.g. a senior business analyst experienced in requirements" aria-describedby="role-help"><div class="help" id="role-help">Example: "a customer-care team leader experienced in escalations".</div><div class="error-text" data-error="2" role="alert" hidden></div></div>
+      </div>
+      <div class="step" data-step="3" hidden>
+        <h3>3. Add context</h3><p class="muted">Explain the situation, who is involved and why you need the result.</p>
+        <div class="field"><label for="context">Context</label><textarea class="textarea" id="context" name="context" maxlength="3000" placeholder="e.g. Our migration project is two weeks behind because a vendor delivered late. The sponsor needs an update before Friday."></textarea></div>
+      </div>
+      <div class="step" data-step="4" hidden>
+        <h3>4. Describe the task</h3><p class="muted">Start with an action verb and name the deliverable.</p>
+        <div class="field"><label for="task">Task</label><textarea class="textarea" id="task" name="task" maxlength="3000" placeholder="e.g. Write an email to the sponsor explaining the delay, its impact and two recovery options."></textarea>
+          <div class="help" id="task-starter"></div><div class="error-text" data-error="4" role="alert" hidden></div></div>
+      </div>
+      <div class="step" data-step="5" hidden>
+        <h3>5. Add source information or inputs</h3><p class="muted">Facts, notes or data the answer must use. Use a [PLACEHOLDER] if you will paste it later.</p>
+        <div class="field"><label for="inputs">Source information</label><textarea class="textarea textarea-lg" id="inputs" name="inputs" maxlength="6000" placeholder="e.g. Original go-live: 30 June. New estimate: 14 July. Cause: vendor environment delivered 10 days late."></textarea></div>
+      </div>
+      <div class="step" data-step="6" hidden>
+        <h3>6. Select an output format</h3><p class="muted">Choose how the result should be structured.</p>
+        <div class="choice-grid" role="radiogroup" aria-label="Output format">
+          {% for f in catalog.output_formats %}<div class="choice"><input type="radio" name="output_format" id="of-{{ f.key }}" value="{{ f.key }}"><label for="of-{{ f.key }}">{{ f.label }}</label></div>{% endfor %}
+        </div>
+        <div class="field" id="custom-format-wrap" hidden style="margin-top:1rem"><label for="custom_format">Describe your custom format</label><textarea class="textarea" id="custom_format" name="custom_format" maxlength="800"></textarea></div>
+        <div class="error-text" data-error="6" role="alert" hidden></div>
+      </div>
+      <div class="step" data-step="7" hidden>
+        <h3>7. Add constraints</h3><p class="muted">Fill only what matters. Empty fields are ignored.</p>
+        <div class="form-row">
+          <div class="field"><label for="c-tone">Tone</label><input class="input" id="c-tone" data-constraint="tone" list="tone-list" maxlength="120"><datalist id="tone-list">{% for t in tones %}<option value="{{ t }}">{% endfor %}</datalist></div>
+          <div class="field"><label for="c-word_limit">Word limit</label><input class="input" id="c-word_limit" data-constraint="word_limit" inputmode="numeric" maxlength="10" placeholder="e.g. 150"></div>
+          <div class="field"><label for="c-audience">Target audience</label><input class="input" id="c-audience" data-constraint="audience" maxlength="200" placeholder="e.g. executive sponsor"></div>
+          <div class="field"><label for="c-language">Language</label><input class="input" id="c-language" data-constraint="language" maxlength="60" placeholder="e.g. English (UK)"></div>
+          <div class="field"><label for="c-reading_level">Reading level</label><input class="input" id="c-reading_level" data-constraint="reading_level" maxlength="80" placeholder="e.g. non-technical readers"></div>
+          <div class="field"><label for="c-num_options">Number of options</label><input class="input" id="c-num_options" data-constraint="num_options" maxlength="10" placeholder="e.g. 3"></div>
+          <div class="field"><label for="c-deadline">Deadline</label><input class="input" id="c-deadline" data-constraint="deadline" maxlength="80" placeholder="e.g. Friday 17:00"></div>
+          <div class="field"><label for="c-detail">Level of detail</label><select class="select" id="c-detail" data-constraint="detail"><option value="">Not specified</option><option value="concise">Concise</option><option value="standard">Standard</option><option value="detailed">Detailed</option></select></div>
+        </div>
+        <div class="field"><label for="c-required_sections">Required sections</label><input class="input" id="c-required_sections" data-constraint="required_sections" maxlength="300" placeholder="e.g. Summary, Impact, Options, Recommendation"></div>
+        <div class="field"><label for="c-excluded_topics">Excluded topics</label><input class="input" id="c-excluded_topics" data-constraint="excluded_topics" maxlength="300" placeholder="e.g. pricing, blame on individuals"></div>
+        <div class="field"><label for="c-extra">Other constraints (one per line)</label><textarea class="textarea" style="min-height:70px" id="c-extra" data-constraint="extra" maxlength="1500" placeholder="e.g. Use active voice"></textarea></div>
+        <div class="field check"><input type="checkbox" id="c-citation" data-constraint="citation" data-check="yes"><label for="c-citation" style="margin:0">Cite the source for every factual claim</label></div>
+        <div class="field check"><input type="checkbox" id="c-privacy" data-constraint="privacy" data-check="yes"><label for="c-privacy" style="margin:0">Add a data-privacy instruction (no personal or confidential data)</label></div>
+      </div>
+      <div class="step" data-step="8" hidden>
+        <h3>8. Define quality criteria</h3><p class="muted">How will you judge a good answer? One criterion per line.</p>
+        <div class="field"><label for="quality_criteria">Quality criteria</label><textarea class="textarea" id="quality_criteria" name="quality_criteria" maxlength="2000" placeholder="e.g. The reader can decide after one read.&#10;No information is invented."></textarea></div>
+        <div class="chips" aria-label="Quick-add criteria">
+          {% for q in ['Use only the information provided', 'State your assumptions', 'List what should be verified', 'Say "Not stated" when information is missing', 'Explain the reasoning behind each recommendation briefly', 'Be clear, concise and easy to act on'] %}<button type="button" class="btn btn-secondary btn-sm" data-add-quality="{{ q }}">{{ icon('plus') }} {{ q }}</button>{% endfor %}
+        </div>
+      </div>
+      <div class="step" data-step="9" hidden>
+        <h3>9. Review and generate</h3><p class="muted">Check the preview on the right. Use the buttons below to copy, save or export your prompt.</p>
+        <div id="review-missing"></div>
+      </div>
+      <div class="wizard-nav">
+        <button type="button" class="btn btn-secondary" id="btn-back">{{ icon('arrow-left') }} Back</button>
+        <div class="row"><button type="button" class="btn btn-secondary" id="btn-save-draft">{{ icon('save') }} Save draft</button><button type="button" class="btn btn-primary" id="btn-next">Next {{ icon('arrow-right') }}</button></div>
+      </div>
+    </form>
+  </section>
+
+  <aside class="preview-sticky stack" aria-label="Live preview" id="preview-col">
+    <section class="card">
+      <div class="card-head"><h2>Live preview</h2><span class="badge" id="draft-state">Draft not saved</span></div>
+      <div class="row" style="margin-bottom:.75rem">
+        <div style="flex:1;min-width:150px"><div class="small muted">Blueprint completion</div><div class="progress" role="progressbar" id="completion-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Completion"><span style="width:0%"></span></div><strong id="completion-text">0%</strong></div>
+        <div><div class="small muted">Quality score</div><strong id="quality-text">-</strong></div>
+      </div>
+      <pre class="prompt-box" id="preview" aria-live="polite" style="min-height:160px">Your prompt appears here as you fill in the Blueprint.</pre>
+      <div class="row no-print" style="margin-top:.75rem">
+        <button type="button" class="btn btn-primary" id="btn-copy">{{ icon('copy') }} Copy</button>
+        <button type="button" class="btn btn-secondary" id="btn-save">{{ icon('folder') }} Save to My Prompts</button>
+        <div class="dropdown"><button type="button" class="btn btn-secondary" data-dropdown aria-haspopup="true" aria-expanded="false">{{ icon('download') }} Export {{ icon('chevron-down') }}</button>
+          <div class="dropdown-menu" hidden><button type="button" data-export="txt">Text (.txt)</button><button type="button" data-export="md">Markdown (.md)</button><button type="button" data-export="json">JSON (.json)</button></div></div>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="miss-h"><h2 id="miss-h">Missing-section guidance</h2><ul class="missing-list" id="missing-list"><li class="muted">Start with step 1.</li></ul></section>
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/builder.js"></script>{% endblock %}

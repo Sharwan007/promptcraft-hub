@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}{{ mod.title }}{% endblock %}
+{% block page_head %}
+<div class="page-head"><div><span class="badge badge-cat">Lesson {{ index }} of {{ total }}</span><h1 style="margin-top:.5rem">{{ mod.title }}</h1><p>{{ mod.summary }}</p></div>
+  <div class="no-print"><button type="button" class="btn {{ 'btn-secondary' if mod.completed else 'btn-primary' }}" id="complete-btn" data-module-id="{{ mod.id }}" data-completed="{{ 'true' if mod.completed else 'false' }}">
+    {% if mod.completed %}{{ icon('check-circle') }} Completed (select to undo){% else %}{{ icon('check') }} Mark as complete{% endif %}</button></div></div>
+{% endblock %}
+{% block content %}
+<div class="grid" style="grid-template-columns:minmax(0,1fr) 300px;align-items:start" id="lesson-grid">
+  <div class="stack lesson-body">
+    <section class="card"><h2>{{ icon('target') }} Lesson objective</h2><p>{{ mod.objective }}</p></section>
+    <section class="card"><h2>Simple explanation</h2>{{ mod.explanation|paragraphs }}</section>
+    <div class="compare">
+      <section class="card ba-good"><h2>{{ icon('check-circle') }} Good example</h2><pre class="prompt-box">{{ mod.good_example|placeholders }}</pre></section>
+      <section class="card ba-weak"><h2>{{ icon('x-circle') }} Weak example</h2><pre class="prompt-box">{{ mod.weak_example }}</pre></section>
+    </div>
+    <div class="compare">
+      <section class="card"><h2>{{ icon('lightbulb') }} Practical tips</h2><ul>{% for t in mod.tips %}<li>{{ t }}</li>{% endfor %}</ul></section>
+      <section class="card"><h2>{{ icon('alert') }} Common mistakes</h2><ul>{% for t in mod.common_mistakes %}<li>{{ t }}</li>{% endfor %}</ul></section>
+    </div>
+    <section class="card" aria-labelledby="kc-h"><h2 id="kc-h">Knowledge check</h2>
+      {% for c in mod.checks %}
+      <div class="quiz-q" data-correct="{{ c.correct_index }}" data-explanation="{{ c.explanation }}">
+        <p><strong>{{ loop.index }}. {{ c.question }}</strong></p>
+        <div role="group" aria-label="Answers for question {{ loop.index }}">{% for o in c.options %}<button type="button" class="quiz-opt" data-index="{{ loop.index0 }}">{{ o }}</button>{% endfor %}</div>
+        <p class="small" data-feedback role="status" aria-live="polite"></p>
+      </div>
+      {% else %}<p class="muted">No questions for this lesson.</p>{% endfor %}
+    </section>
+    <nav class="row between no-print" aria-label="Lesson navigation">
+      {% if prev %}<a class="btn btn-secondary" href="/learning/{{ prev.slug }}">{{ icon('arrow-left') }} {{ prev.number }}. {{ prev.title }}</a>{% else %}<span></span>{% endif %}
+      {% if next %}<a class="btn btn-primary" href="/learning/{{ next.slug }}">{{ next.number }}. {{ next.title }} {{ icon('arrow-right') }}</a>{% else %}<a class="btn btn-primary" href="/learning">Back to all lessons</a>{% endif %}
+    </nav>
+  </div>
+  <aside class="card side-sticky" aria-label="Progress"><h3>Course progress</h3><p class="muted">{{ progress.completed }} of {{ progress.total }} lessons complete</p>
+    <div class="progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="Learning progress"><span style="width: {{ progress.percent }}%" id="side-progress"></span></div>
+    <p style="margin-top:1rem"><a href="/learning">All lessons</a> &middot; <a href="/learning#glossary">Glossary</a></p>
+    <p class="small muted">Tip: try the idea in the <a href="/builder">Prompt Builder</a> or check a real prompt in the <a href="/diagnostic">Diagnostic</a>.</p></aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/learning.js"></script>{% endblock %}

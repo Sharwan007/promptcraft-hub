@@ -1,0 +1,13 @@
+{# expects: page, pages, base_qs, base_path (optional) #}
+{% if pages > 1 %}
+{% set bp = base_path if base_path is defined and base_path else current_path %}
+{% macro link(n, label) %}<a href="{{ bp }}?{{ base_qs ~ '&' if base_qs }}page={{ n }}" {% if n == page %}aria-current="page"{% endif %} aria-label="Page {{ n }}">{{ label }}</a>{% endmacro %}
+<nav class="pagination" aria-label="Pagination">
+  {% if page > 1 %}<a href="{{ bp }}?{{ base_qs ~ '&' if base_qs }}page={{ page - 1 }}" rel="prev">&laquo; Previous</a>{% else %}<span class="disabled" aria-hidden="true">&laquo; Previous</span>{% endif %}
+  {% for n in range(1, pages + 1) %}
+    {% if n == 1 or n == pages or (n >= page - 2 and n <= page + 2) %}{{ link(n, n) }}
+    {% elif n == page - 3 or n == page + 3 %}<span aria-hidden="true">&hellip;</span>{% endif %}
+  {% endfor %}
+  {% if page < pages %}<a href="{{ bp }}?{{ base_qs ~ '&' if base_qs }}page={{ page + 1 }}" rel="next">Next &raquo;</a>{% else %}<span class="disabled" aria-hidden="true">Next &raquo;</span>{% endif %}
+</nav>
+{% endif %}

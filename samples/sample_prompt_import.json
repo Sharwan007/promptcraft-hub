@@ -1,0 +1,40 @@
+{
+  "format": "promptcraft-library",
+  "version": 1,
+  "prompts": [
+    {
+      "title": "Sample: Weekly Team Update",
+      "description": "Turns raw weekly notes into a short, upbeat team update.",
+      "category": "General Productivity",
+      "subcategory": "Communication",
+      "user_role": "Team Lead",
+      "use_case": "Writing weekly updates",
+      "difficulty": "Beginner",
+      "ai_tools": ["Tool-independent"],
+      "tags": ["weekly-update", "team", "sample"],
+      "full_prompt": "Act as an experienced team lead who writes clear, upbeat updates.\n\nContext:\nI lead a small team and send a weekly update every Friday.\n\nTask:\nTurn my notes into a weekly update that covers wins, blockers and next week's priorities.\n\nInput:\nMy notes: [MEETING NOTES]\n\nOutput format:\nThree short sections (Wins, Blockers, Next week) with up to three bullets each.\n\nConstraints:\n- Under 150 words.\n- Friendly, professional tone.\n- Use only the facts in my notes.\n\nQuality criteria:\n- A colleague can read it in under a minute.\n- Nothing is invented.",
+      "expected_output": "A 120-word update with three short sections.",
+      "required_inputs": ["MEETING NOTES"],
+      "example_inputs": {"MEETING NOTES": "Shipped the invoice export; waiting on vendor API keys; plan to start testing Monday."},
+      "example_output": "Wins: invoice export shipped. Blockers: vendor API keys. Next week: start testing.",
+      "why_it_works": "A fixed structure and a facts-only rule keep the update short and trustworthy.",
+      "customization_tips": ["Add your team's name and tone.", "Ask for a Slack-length version."],
+      "common_mistakes": ["Pasting private information.", "Not limiting the length."],
+      "constraints": ["Under 150 words.", "Friendly, professional tone."],
+      "components": {"role": "Act as an experienced team lead who writes clear, upbeat updates.", "context": "I lead a small team and send a weekly update every Friday.", "task": "Turn my notes into a weekly update.", "input": "My notes: [MEETING NOTES]", "output_format": "Three short sections.", "constraints": ["Under 150 words."], "quality_criteria": ["Nothing is invented."]},
+      "featured": false,
+      "published": true
+    },
+    {
+      "title": "Sample: Meeting Decision Summary",
+      "description": "Extracts only the decisions and owners from meeting notes.",
+      "category": "Meeting Notes",
+      "user_role": "Project Coordinator",
+      "difficulty": "Beginner",
+      "ai_tools": ["Microsoft Copilot", "ChatGPT"],
+      "tags": ["decisions", "meeting", "sample"],
+      "full_prompt": "Act as a careful project coordinator.\n\nContext:\nWe held a meeting and I need a record of what was decided.\n\nTask:\nList every decision with its owner and date.\n\nInput:\n[MEETING NOTES]\n\nOutput format:\nA table with columns Decision, Owner, Date.\n\nConstraints:\n- Write 'Not stated' when the owner or date is missing.\n\nQuality criteria:\n- Only decisions that were actually agreed appear in the table.",
+      "why_it_works": "The 'Not stated' rule prevents invented owners and dates."
+    }
+  ]
+}

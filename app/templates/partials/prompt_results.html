@@ -1,0 +1,20 @@
+{% from "partials/macros.html" import icon, prompt_card %}
+{% if error %}<div class="alert alert-danger" role="alert">{{ icon('alert') }}<div>{{ error }} Use the filter lists instead of typing values by hand.</div></div>{% endif %}
+<div data-total="{{ total }}" data-page="{{ page }}" data-pages="{{ pages }}" id="results-meta" hidden></div>
+{% if items %}
+<div class="{{ 'prompt-list' if view == 'list' else 'prompt-grid' }}" id="prompt-collection">
+  {% for p in items %}{{ prompt_card(p, q, view == 'list') }}{% endfor %}
+</div>
+{% set base_path = base_path if base_path is defined else '/prompts' %}
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty">
+  {{ icon('search') }}
+  <h3>No prompts match your search</h3>
+  <p>Try fewer or different keywords, or remove a filter. Searches look at titles, descriptions, prompt text, roles, use cases and tags.</p>
+  <div class="row" style="justify-content:center">
+    {% if has_filters %}<a class="btn btn-primary" href="{{ base_path if base_path is defined else '/prompts' }}">Clear all filters</a>{% endif %}
+    <a class="btn btn-secondary" href="/builder">Build your own prompt</a>
+  </div>
+</div>
+{% endif %}

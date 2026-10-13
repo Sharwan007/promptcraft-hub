@@ -1,0 +1,42 @@
+{% macro icon(name, cls='') -%}<svg class="icon {{ cls }}" aria-hidden="true" focusable="false"><use href="/static/icons/sprite.svg#i-{{ name }}"></use></svg>{%- endmacro %}
+
+{% macro score_ring(score, label='', size='') -%}
+{% set cls = 'ring-low' if score < 40 else ('ring-mid' if score < 60 else ('ring-good' if score < 80 else 'ring-high')) %}
+<div class="score-ring {{ cls }} {{ size }}" style="--pct: {{ score }}" role="img" aria-label="Score {{ score }} out of 100{% if label %}, {{ label }}{% endif %}"><div><strong>{{ score }}</strong><span>/ 100</span></div></div>
+{%- endmacro %}
+
+{% macro difficulty_badge(d) -%}
+<span class="badge badge-{{ d|lower }}">{% if d == 'Beginner' %}● {% elif d == 'Intermediate' %}●● {% else %}●●● {% endif %}{{ d }}</span>
+{%- endmacro %}
+
+{% macro prompt_card(p, q='', list_mode=False, allow_remove=False) -%}
+<article class="prompt-card" data-prompt-id="{{ p.id }}">
+  <div class="body" {% if not list_mode %}style="display:contents"{% endif %}>
+    <div class="meta">
+      <span class="badge badge-cat">{{ p.category }}</span>
+      {{ difficulty_badge(p.difficulty) }}
+      {% if p.featured %}<span class="badge badge-featured">{{ icon('star') }} Featured</span>{% endif %}
+    </div>
+    <h3><a href="/prompts/{{ p.slug }}">{{ p.title|highlight(q) }}</a></h3>
+    <p class="desc">{{ p.description|highlight(q) }}</p>
+    <div class="meta" aria-label="Compatible AI tools">
+      {% for t in p.ai_tools %}<span class="badge badge-tool">{{ t }}</span>{% endfor %}
+    </div>
+    <div class="chips" aria-label="Tags">{% for t in p.tags[:4] %}<a class="tag" href="/prompts?tag={{ t|urlencode }}">#{{ t|highlight(q) }}</a>{% endfor %}</div>
+  </div>
+  <div class="actions">
+    {% if p.full_prompt is defined %}<button type="button" class="btn btn-secondary btn-sm" data-copy-prompt="{{ p.full_prompt }}" data-prompt-id="{{ p.id }}">{{ icon('copy') }} Copy</button>{% endif %}
+    <a class="btn btn-primary btn-sm" href="/prompts/{{ p.slug }}">{{ icon('eye') }} View details</a>
+    <button type="button" class="btn-icon {{ 'is-on' if p.is_favorite }}" data-favorite="{{ p.id }}" aria-pressed="{{ 'true' if p.is_favorite else 'false' }}" aria-label="{{ 'Remove from favorites' if p.is_favorite else 'Add to favorites' }}: {{ p.title }}" data-tip="Favorite">{{ icon('heart') }}</button>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro status_badge(status) -%}
+{% set labels = {'present': 'Present', 'partial': 'Partially present', 'missing': 'Missing', 'needs_clarification': 'Needs clarification'} %}
+<span class="badge badge-{{ status }}">{% if status == 'present' %}{{ icon('check-circle') }}{% elif status == 'partial' %}{{ icon('info') }}{% elif status == 'missing' %}{{ icon('x-circle') }}{% else %}{{ icon('alert') }}{% endif %} {{ labels.get(status, status) }}</span>
+{%- endmacro %}
+
+{% macro alert(kind, text, ic='info') -%}
+<div class="alert alert-{{ kind }}" role="{{ 'alert' if kind in ('danger', 'warning') else 'status' }}">{{ icon(ic) }}<div>{{ caller() if caller else text }}</div></div>
+{%- endmacro %}

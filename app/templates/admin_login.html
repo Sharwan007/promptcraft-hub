@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import icon %}
+{% block title %}{{ 'Set up administrator PIN' if mode == 'setup' else 'Administrator sign-in' }}{% endblock %}
+{% block page_head %}{% endblock %}
+{% block content %}
+<section class="card auth-card">
+  <div class="center"><img src="/static/images/logo.svg" alt="PromptCraft Hub logo" width="56" height="56"></div>
+  <h1 class="center" style="margin-top:.5rem">{{ 'Set up your administrator PIN' if mode == 'setup' else 'Administrator sign-in' }}</h1>
+  <div class="alert alert-warning" role="note">{{ icon('shield') }}<div>{{ admin_warning }}</div></div>
+  {% if error %}<div class="alert alert-danger" role="alert">{{ icon('alert') }}<div><strong>{{ error }}</strong>{% if details %}<ul style="margin:.4rem 0 0">{% for d in details %}<li>{{ d }}</li>{% endfor %}</ul>{% endif %}{% if hint %}<br>{{ hint }}{% endif %}</div></div>{% endif %}
+  {% if mode == 'setup' %}
+  <p class="muted">This is the first run. Choose a PIN (at least 6 characters) to protect the administration area. It is stored only as a salted hash and cannot be shown again.</p>
+  <form method="post" action="/admin/setup" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="field"><label for="pin">New PIN</label><input class="input" id="pin" name="pin" type="password" minlength="6" maxlength="64" required autocomplete="new-password" autofocus></div>
+    <div class="field"><label for="confirm">Confirm PIN</label><input class="input" id="confirm" name="confirm" type="password" minlength="6" maxlength="64" required autocomplete="new-password"></div>
+    <button class="btn btn-primary btn-lg" type="submit" style="width:100%">{{ icon('lock') }} Save PIN and continue</button>
+  </form>
+  {% else %}
+  <form method="post" action="/admin/login" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="next" value="{{ next or '/admin' }}">
+    <div class="field"><label for="pin">Administrator PIN</label><input class="input" id="pin" name="pin" type="password" maxlength="64" required autocomplete="current-password" autofocus></div>
+    <button class="btn btn-primary btn-lg" type="submit" style="width:100%">{{ icon('lock') }} Sign in</button>
+  </form>
+  <p class="help center" style="margin-top:1rem">Sessions expire automatically. Forgot the PIN? See the README (Admin PIN is not working).</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+/* Dark theme: variable overrides keep contrast above WCAG AA. */
+:root[data-theme="dark"] {
+  --bg: #0f1226; --surface: #181c36; --surface-2: #20254a; --surface-3: #2a3060;
+  --border: #2b3160; --border-strong: #424a85; --text: #eceffd; --text-muted: #b4bbdc; --text-faint: #98a1cc;
+  --primary: #818cf8; --primary-500: #a5b4fc; --primary-700: #6366f1; --primary-50: #23295a; --primary-100: #2d3470; --on-primary: #0f1226;
+  --secondary: #c4b5fd; --secondary-50: #34286b; --accent: #5eead4; --accent-50: #123c3b;
+  --success: #86efac; --success-bg: #12351f; --warning: #fcd34d; --warning-bg: #3d2f0b; --danger: #fca5a5; --danger-bg: #431818; --info: #93c5fd; --info-bg: #172a52;
+  --sidebar-bg: #0a0c1c; --focus: #93c5fd; --hl: #854d0e; --ph-bg: #34286b; --ph-text: #ddd6fe;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4); --shadow: 0 4px 14px rgba(0,0,0,.45); --shadow-lg: 0 16px 40px rgba(0,0,0,.6);
+}
+:root[data-theme="dark"] .btn-primary { background: #6366f1; color: #fff; } :root[data-theme="dark"] .btn-primary:hover { background: #818cf8; }
+:root[data-theme="dark"] .btn-danger { background: #dc2626; }
+:root[data-theme="dark"] .pagination [aria-current="page"] { background: #6366f1; border-color: #6366f1; color: #fff; }
+:root[data-theme="dark"] .alert-info { color: #dbeafe; border-color: #1d4ed8; } :root[data-theme="dark"] .alert-warning { color: #fef3c7; border-color: #b45309; } :root[data-theme="dark"] .alert-danger { color: #fee2e2; border-color: #b91c1c; } :root[data-theme="dark"] .alert-success { color: #dcfce7; border-color: #15803d; }
+:root[data-theme="dark"] .badge-featured { background: #422006; color: #fde68a; }
+:root[data-theme="dark"] .choice input:checked + label, :root[data-theme="dark"] .stepper .is-current .n { color: #fff; }
+:root[data-theme="dark"] .stepper .is-current .n { background: #6366f1; }
+:root[data-theme="dark"] .hero { background: linear-gradient(120deg, #1e1b4b 0%, #3730a3 55%, #115e59 120%); }
+:root[data-theme="dark"] .global-search input { color: var(--text); }
+:root[data-theme="dark"] input::placeholder, :root[data-theme="dark"] textarea::placeholder { color: #8b93bd; }
+:root[data-theme="dark"] .seg [aria-pressed="true"], :root[data-theme="dark"] .seg .is-active { background: #6366f1; color: #fff; }
+:root[data-theme="dark"] .print-page { background: #fff; }
+.theme-icon-dark { display: none; } :root[data-theme="dark"] .theme-icon-light { display: none; } :root[data-theme="dark"] .theme-icon-dark { display: inline; }
